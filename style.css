@@ -140,13 +140,19 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 
 /* 觸發縮小並飛往左上角的狀態 */
 .loading-screen.shrink-to-nav .loading-icon {
-    animation: none;
+    animation: none; /* 停止閃爍，準備飛行 */
+    
+    /* 1. 目標尺寸：與導覽列 Icon 相同 */
     width: 28px;
     height: 28px;
+    
+    /* 2. 精準座標：利用 calc 自動計算大螢幕與手機的正確落點 */
     top: 16px;
-    left: 24px;
-    transform: translate(0, 0); /* 核心邏輯：解除原先的置中偏移，讓 top 與 left 接手精準定位 */
-    opacity: 0;
+    left: max(24px, calc(50vw - 560px + 24px)); 
+    transform: translate(0, 0); 
+    
+    /* 3. ⚠️ 關鍵修正：保持完全不透明，讓肉眼看見完整飛行軌跡 */
+    opacity: 1; 
 }
 
 .loading-screen.shrink-to-nav .loading-bg {
