@@ -59,8 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. 擴散後停留 0.8 秒，啟動飛往左上角的動畫
         setTimeout(() => {
-            loadingIcon.style.animation = 'none'; // 關鍵動作：用 JS 強制拔除閃爍動畫，釋放控制權
-            loadingScreen.classList.add('shrink-to-nav');
+            loadingIcon.style.animation = 'none'; // ⚠️ 關鍵動作：用 JS 強制拔除閃爍動畫
+            
+            // 強制瀏覽器重繪 (Reflow)，這是一個小技巧，確保上一步的取消動畫生效後，再套用新的飛行動畫
+            void loadingIcon.offsetWidth; 
+            
+            loadingScreen.classList.add('shrink-to-nav'); // 套用飛行動畫
         }, 2300);
 
         // 3. 飛行動畫結束後，將動畫區塊徹底移除
