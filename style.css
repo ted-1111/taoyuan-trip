@@ -151,10 +151,11 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 
 /* 飛行的終點座標 */
 .loading-screen.shrink-to-nav .loading-icon {
-    top: 5px;      /* 配合 50px 的圖標，將起點往上推以維持原來的垂直中心點 */
-    left: max(24px, calc(50vw - 560px + 24px));
-    width: 50px;   /* 更新為 50px */
-    height: 50px;  /* 更新為 50px */
+    /* 接收精準座標，若無則退回預設值 */
+    top: var(--target-top, 16px);
+    left: var(--target-left, 24px);
+    width: var(--target-width, 50px);
+    height: var(--target-height, 50px);
     transform: translate(0, 0); 
 }
 .clickable { cursor: pointer; }

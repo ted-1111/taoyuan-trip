@@ -59,7 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. 擴散後停留 0.8 秒，啟動飛往左上角的動畫
         setTimeout(() => {
-            // 完美交接：拔除閃爍 class，讓 transition 自動接管飛往左上角的任務
+            // --- 新增核心邏輯：動態鎖定目標座標 ---
+            const targetIcon = document.querySelector('.brand-icon'); // 抓取導覽列的真實 Icon
+            if (targetIcon) {
+                const rect = targetIcon.getBoundingClientRect(); // 取得它在螢幕上的精準位置與大小
+                
+                // 將抓到的真實數據寫入 CSS 變數中
+                loadingIcon.style.setProperty('--target-top', `${rect.top}px`);
+                loadingIcon.style.setProperty('--target-left', `${rect.left}px`);
+                loadingIcon.style.setProperty('--target-width', `${rect.width}px`);
+                loadingIcon.style.setProperty('--target-height', `${rect.height}px`);
+            }
+
+            // 拔除閃爍 class，觸發轉場飛行
             loadingIcon.classList.remove('is-pulsing');
             loadingScreen.classList.add('shrink-to-nav');
         }, 2300);
