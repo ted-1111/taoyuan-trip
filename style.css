@@ -85,96 +85,77 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .schedule-desc span { font-size: 14px; color: var(--text-muted); }
 .loading-screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     background-color: #ffffff;
     z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    overflow: hidden; /* 防止撐破螢幕 */
     transition: background-color 0.5s ease;
 }
 
 /* 負責擴散的藍色圓形背景 */
 .loading-bg {
     position: absolute;
-    width: 0;
-    height: 0;
-    background-color: #031E33; /* 你 Icon 的深藍色 */
+    top: 50%; left: 50%; /* 修正：確保從正中央擴散 */
+    transform: translate(-50%, -50%);
+    width: 0; height: 0;
+    background-color: #031E33; /* 你的深藍色 */
     border-radius: 50%;
     transition: width 0.8s ease-in-out, height 0.8s ease-in-out;
     z-index: 1;
 }
 
-/* 觸發擴散的狀態 */
 .loading-bg.expand {
-    width: 300vw;
-    height: 300vw;
+    width: 300vw; height: 300vw;
 }
 
-/* 中央的 Icon 樣式 */
+/* 中央的 Icon 基礎設定與飛行轉場 */
 .loading-icon {
-    position: fixed; /* 改用 fixed 徹底脫離父元素排版干擾 */
-    top: 50%;
-    left: 50%;
+    position: fixed;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 220px;
-    height: 220px;
-    max-width: 60vw;
-    max-height: 60vw;
+    width: 220px; height: 220px;
+    max-width: 60vw; max-height: 60vw;
     border-radius: 50%;
     z-index: 10000;
     object-fit: cover;
-    animation: pulse 1.5s infinite; /* 預設播放閃爍動畫 */
+    /* 負責接管飛行的平滑轉場 */
+    transition: top 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                left 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                width 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                height 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 閃爍動畫 */
+/* 獨立的閃爍狀態 */
+.is-pulsing {
+    animation: pulse 1.5s infinite;
+}
+
 @keyframes pulse {
     0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
     50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
 }
 
-/* 觸發飛行：利用全新動畫強制接管軌跡 */
-.loading-screen.shrink-to-nav .loading-icon {
-    /* forwards 代表動畫結束後，停留在 100% 的最終狀態 */
-    animation: fly-to-nav 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; /* 加 !important 避免被覆蓋 */
-}
-
-/* 專屬的飛行軌跡腳本 (這段必須留著！) */
-@keyframes fly-to-nav {
-    0% {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 220px;
-        height: 220px;
-    }
-    100% {
-        top: 16px;
-        left: max(24px, calc(50vw - 560px + 24px)); 
-        transform: translate(0, 0);
-        width: 28px;
-        height: 28px;
-    }
+/* 觸發縮小並飛往左上角的狀態 */
+.loading-screen.shrink-to-nav {
+    background-color: transparent;
+    pointer-events: none;
 }
 
 .loading-screen.shrink-to-nav .loading-bg {
-    opacity: 0; /* 藍色背景淡出露出實際網頁 */
+    opacity: 0;
     transition: opacity 0.5s ease;
 }
 
+/* 飛行的終點座標 */
 .loading-screen.shrink-to-nav .loading-icon {
-    animation: none; /* 停止閃爍 */
-    /* 目標縮小尺寸與位置 (對齊你導覽列的 28px) */
+    top: 16px;
+    left: max(24px, calc(50vw - 560px + 24px));
     width: 28px;
     height: 28px;
-    top: 16px;
-    left: 24px;
-    opacity: 0; /* 飛到定點後隱藏，由原本 Navbar 裡的 Icon 接手 */
+    transform: translate(0, 0); 
 }
 .clickable { cursor: pointer; }
 .timeline-item { display: flex; gap: 24px; margin-bottom: 16px; position: relative; padding: 16px; border-radius: 12px; transition: var(--transition); border: 1px solid transparent; }

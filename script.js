@@ -49,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 新增：載入動畫時程控制 ---
     const loadingScreen = document.getElementById('loading-screen');
     const loadingBg = document.getElementById('loading-bg');
-    const loadingIcon = document.getElementById('loading-icon'); // 抓取 Icon 節點
+    const loadingIcon = document.getElementById('loading-icon');
 
-    if (loadingScreen) {
+    if (loadingScreen && loadingIcon && loadingBg) {
         // 1. 停頓 1.5 秒後，藍色背景開始擴散填滿全畫面
         setTimeout(() => {
             loadingBg.classList.add('expand');
@@ -59,12 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. 擴散後停留 0.8 秒，啟動飛往左上角的動畫
         setTimeout(() => {
-            loadingIcon.style.animation = 'none'; // ⚠️ 關鍵動作：用 JS 強制拔除閃爍動畫
-            
-            // 強制瀏覽器重繪 (Reflow)，這是一個小技巧，確保上一步的取消動畫生效後，再套用新的飛行動畫
-            void loadingIcon.offsetWidth; 
-            
-            loadingScreen.classList.add('shrink-to-nav'); // 套用飛行動畫
+            // 完美交接：拔除閃爍 class，讓 transition 自動接管飛往左上角的任務
+            loadingIcon.classList.remove('is-pulsing');
+            loadingScreen.classList.add('shrink-to-nav');
         }, 2300);
 
         // 3. 飛行動畫結束後，將動畫區塊徹底移除
