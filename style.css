@@ -118,25 +118,35 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 /* 中央的 Icon 樣式與閃爍動畫 */
 .loading-icon {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 核心邏輯：強制絕對置中，無視設備尺寸 */
+    width: 220px;          /* 將原本的 120px 放大至 220px */
+    height: 220px;
+    max-width: 60vw;       /* 加入保險機制：防止在極小手機螢幕上超出邊界 */
+    max-height: 60vw;
     border-radius: 50%;
     z-index: 2;
     object-fit: cover;
-    animation: pulse 1.5s infinite; /* 閃爍動畫 */
+    animation: pulse 1.5s infinite;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes pulse {
-    0% { transform: scale(0.95); opacity: 0.8; }
-    50% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(0.95); opacity: 0.8; }
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
 }
 
 /* 觸發縮小並飛往左上角的狀態 */
-.loading-screen.shrink-to-nav {
-    background-color: transparent;
-    pointer-events: none; /* 停止阻擋點擊 */
+.loading-screen.shrink-to-nav .loading-icon {
+    animation: none;
+    width: 28px;
+    height: 28px;
+    top: 16px;
+    left: 24px;
+    transform: translate(0, 0); /* 核心邏輯：解除原先的置中偏移，讓 top 與 left 接手精準定位 */
+    opacity: 0;
 }
 
 .loading-screen.shrink-to-nav .loading-bg {
