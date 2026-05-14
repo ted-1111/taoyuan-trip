@@ -35,12 +35,12 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     align-items: center;   /* 新增：讓圖片與文字垂直置中對齊 */
     gap: 12px;             /* 新增：圖片與文字之間的間距 */
 }
-
 .brand-icon {
-    height: 5px;          /* 強制限制 Icon 高度，避免撐爆導覽列 */
-    width: auto;           /* 寬度依比例自動縮放 */
-    border-radius: 6px;    /* 可選：讓圖片四角有些微圓角，視覺更柔和 */
-    object-fit: cover;
+    height: 2px;          /* ⚠️ 關鍵：設定為 22px，這是一個很小的數字 */
+    width: auto;           /* 寬度依比例自動縮放，圖片不會變形 */
+    border-radius: 4px;    /* 稍微修一點點圓角，看起來更精緻 */
+    object-fit: contain;   /* 新增：確保整張圖片都完整顯示在 22px 的高度內 */
+    display: block;        /* 防止圖片下方出現奇怪的空白 */
 }
 .nav-links { display: flex; align-items: center; gap: 24px; }
 .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 15px; transition: color 0.2s; }
