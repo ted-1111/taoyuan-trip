@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 新增：載入動畫時程控制 ---
     const loadingScreen = document.getElementById('loading-screen');
     const loadingBg = document.getElementById('loading-bg');
+    const loadingIcon = document.getElementById('loading-icon'); // 抓取 Icon 節點
 
     if (loadingScreen) {
         // 1. 停頓 1.5 秒後，藍色背景開始擴散填滿全畫面
@@ -56,12 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingBg.classList.add('expand');
         }, 1500);
 
-        // 2. 擴散後停留 0.8 秒（總計 2.3 秒），啟動飛往左上角的動畫
+        // 2. 擴散後停留 0.8 秒，啟動飛往左上角的動畫
         setTimeout(() => {
+            loadingIcon.style.animation = 'none'; // 關鍵動作：用 JS 強制拔除閃爍動畫，釋放控制權
             loadingScreen.classList.add('shrink-to-nav');
         }, 2300);
 
-        // 3. 飛行動畫結束後（總計 3.2 秒），將動畫區塊徹底移除，釋放記憶體
+        // 3. 飛行動畫結束後，將動畫區塊徹底移除
         setTimeout(() => {
             loadingScreen.remove();
         }, 3200);
