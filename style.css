@@ -26,7 +26,22 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 
 .navbar { border-bottom: 1px solid var(--border-light); position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); z-index: 100; }
 .nav-container { max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-.brand { font-size: 20px; font-weight: 700; color: var(--brand-color); text-decoration: none; }
+.brand { 
+    font-size: 20px; 
+    font-weight: 700; 
+    color: var(--brand-color); 
+    text-decoration: none; 
+    display: flex;         /* 新增：啟用 Flexbox 排版 */
+    align-items: center;   /* 新增：讓圖片與文字垂直置中對齊 */
+    gap: 12px;             /* 新增：圖片與文字之間的間距 */
+}
+
+.brand-icon {
+    height: 32px;          /* 強制限制 Icon 高度，避免撐爆導覽列 */
+    width: auto;           /* 寬度依比例自動縮放 */
+    border-radius: 8px;    /* 可選：讓圖片四角有些微圓角，視覺更柔和 */
+    object-fit: cover;
+}
 .nav-links { display: flex; align-items: center; gap: 24px; }
 .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 15px; transition: color 0.2s; }
 .nav-links a:hover { color: var(--brand-color); }
