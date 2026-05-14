@@ -59,6 +59,16 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .cross-list li { margin-bottom: 12px; color: var(--text-muted); line-height: 1.5; }
 .cross-list i { color: var(--error); margin-right: 8px; }
 
+/* 時間行程表樣式 */
+.schedule-table { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+.schedule-row { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border-light); align-items: center; }
+.schedule-row:last-child { border-bottom: none; padding-bottom: 0; }
+.schedule-row:first-child { padding-top: 0; }
+.schedule-time { font-size: 16px; font-weight: 700; color: var(--brand-color); width: 60px; flex-shrink: 0; }
+.schedule-desc { display: flex; flex-direction: column; gap: 4px; }
+.schedule-desc strong { font-size: 16px; color: var(--text-main); }
+.schedule-desc span { font-size: 14px; color: var(--text-muted); }
+
 .clickable { cursor: pointer; }
 .timeline-item { display: flex; gap: 24px; margin-bottom: 16px; position: relative; padding: 16px; border-radius: 12px; transition: var(--transition); border: 1px solid transparent; }
 .timeline-item:hover { background: var(--bg-light); border-color: var(--border-light); transform: translateX(5px); box-shadow: var(--shadow-soft); }
@@ -104,6 +114,11 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .screen-overlay.active .overlay-card { transform: scale(1) translateY(0); }
 .close-overlay { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; z-index: 10; }
 .close-overlay:hover { color: var(--text-main); }
+
+/* 登入/註冊分頁切換樣式 */
+.auth-tabs { display: flex; margin-bottom: 24px; border-bottom: 2px solid var(--border-light); }
+.auth-tab { flex: 1; padding: 12px; background: none; border: none; font-size: 16px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+.auth-tab.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); margin-bottom: -2px; }
 
 .terms-checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin: 16px 0; font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 .terms-checkbox-group input[type="checkbox"] { margin-top: 3px; cursor: pointer; width: 16px; height: 16px; accent-color: var(--brand-color); }

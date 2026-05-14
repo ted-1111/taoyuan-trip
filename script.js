@@ -1,4 +1,12 @@
 let isLoggedIn = false;
+let currentUser = "";
+
+// 啟動時檢查是否已有儲存的帳號狀態 (模擬真實登入記憶)
+const savedUser = localStorage.getItem('taoyuan_user');
+if (savedUser) {
+    isLoggedIn = true;
+    currentUser = savedUser;
+}
 
 const spotData = [
     {
@@ -25,6 +33,10 @@ const spotData = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // 更新登入按鈕狀態
+    updateNavUI();
+
     const revealElements = document.querySelectorAll('.reveal');
     const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -105,22 +117,63 @@ document.addEventListener('DOMContentLoaded', () => {
     navAuthBtn.addEventListener('click', (e) => {
         e.preventDefault();
         if (isLoggedIn) {
+            // 登出動作
             isLoggedIn = false;
-            navAuthBtn.innerHTML = '<i class="far fa-user-circle"></i> 登入/註冊';
+            currentUser = "";
+            localStorage.removeItem('taoyuan_user');
+            updateNavUI();
         } else {
             openOverlay('auth-overlay');
         }
     });
 
+    // 登入表單處理
     document.getElementById('login-form').addEventListener('submit', (e) => {
         e.preventDefault();
         const btn = e.target.querySelector('button');
+        const email = document.getElementById('login-email').value;
+        
+        // 簡單擷取 Email 前綴作為名稱
+        const name = email.split('@')[0];
+
         btn.innerText = "驗證中...";
+        btn.disabled = true;
         
         setTimeout(() => {
             isLoggedIn = true;
-            navAuthBtn.innerHTML = '<i class="fas fa-user-circle"></i> Yun (登出)';
-            btn.innerText = "繼續";
+            currentUser = name;
+            localStorage.setItem('taoyuan_user', name);
+            updateNavUI();
+            btn.innerText = "登入";
+            btn.disabled = false;
+            closeOverlay('auth-overlay');
+        }, 800);
+    });
+
+    // 註冊表單處理
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('reg-pwd').value;
+        const pwdConfirm = document.getElementById('reg-pwd-confirm').value;
+        
+        if (pwd !== pwdConfirm) {
+            alert("密碼與確認密碼不相符，請重新輸入。");
+            return;
+        }
+
+        const btn = e.target.querySelector('button');
+        const name = document.getElementById('reg-name').value;
+
+        btn.innerText = "建立帳號中...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+            isLoggedIn = true;
+            currentUser = name;
+            localStorage.setItem('taoyuan_user', name);
+            updateNavUI();
+            btn.innerText = "註冊並登入";
+            btn.disabled = false;
             closeOverlay('auth-overlay');
         }, 800);
     });
@@ -156,17 +209,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function updateNavUI() {
+    const navAuthBtn = document.getElementById('nav-auth-btn');
+    if (isLoggedIn) {
+        navAuthBtn.innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser} (登出)`;
+    } else {
+        navAuthBtn.innerHTML = '<i class="far fa-user-circle"></i> 登入 / 註冊';
+    }
+}
+
+window.switchAuthTab = function(tab) {
+    if (tab === 'login') {
+        document.getElementById('tab-login').classList.add('active');
+        document.getElementById('tab-register').classList.remove('active');
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('register-form').style.display = 'none';
+    } else {
+        document.getElementById('tab-register').classList.add('active');
+        document.getElementById('tab-login').classList.remove('active');
+        document.getElementById('register-form').style.display = 'block';
+        document.getElementById('login-form').style.display = 'none';
+    }
+};
+
 function openOverlay(id) {
     document.getElementById(id).classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function closeOverlay(id) {
+window.closeOverlay = function(id) {
     document.getElementById(id).classList.remove('active');
     document.body.style.overflow = '';
-}
+};
 
-function triggerMobileBooking() {
+window.triggerMobileBooking = function() {
     if (!isLoggedIn) {
         openOverlay('auth-overlay');
     } else {
@@ -175,7 +251,7 @@ function triggerMobileBooking() {
             document.getElementById('date').focus();
         }, 500);
     }
-}
+};
 
 window.openSpotDetail = function(index) {
     const data = spotData[index];

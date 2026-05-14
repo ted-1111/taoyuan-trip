@@ -17,7 +17,7 @@
                 <a href="#overview">總覽</a>
                 <a href="#itinerary">行程</a>
                 <a href="#terms">注意事項</a>
-                <a href="#" id="nav-auth-btn" class="login-btn"><i class="far fa-user-circle"></i> 登入/註冊</a>
+                <a href="#" id="nav-auth-btn" class="login-btn"><i class="far fa-user-circle"></i> 登入 / 註冊</a>
             </div>
         </div>
     </header>
@@ -90,7 +90,54 @@
                 <hr class="divider">
 
                 <section id="itinerary" class="itinerary reveal">
-                    <h2>詳細安排 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400; margin-left: 12px;">(點擊卡片查看詳細介紹)</span></h2>
+                    <h2>時間行程表</h2>
+                    
+                    <div class="schedule-table">
+                        <div class="schedule-row">
+                            <div class="schedule-time">09:00</div>
+                            <div class="schedule-desc">
+                                <strong>專車到府尊榮接駁</strong>
+                                <span>管家於指定地點等候，協助行李搬運與座位安排。</span>
+                            </div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-time">10:00</div>
+                            <div class="schedule-desc">
+                                <strong>石門水庫 私房靜謐遊湖</strong>
+                                <span>享受無障礙平緩步道與大壩風光，遠離人潮。</span>
+                            </div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-time">12:30</div>
+                            <div class="schedule-desc">
+                                <strong>米其林級/頂級私廚饗宴</strong>
+                                <span>依據家族口味客製化之中午餐飲安排。</span>
+                            </div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-time">14:30</div>
+                            <div class="schedule-desc">
+                                <strong>Xpark 都會型水生公園</strong>
+                                <span>VIP快速通關入館，體驗現代科技海洋互動。</span>
+                            </div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-time">17:30</div>
+                            <div class="schedule-desc">
+                                <strong>中原夜市 專人美食導覽</strong>
+                                <span>管家代為採買指定小吃，保留最高探索自由度。</span>
+                            </div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-time">20:00</div>
+                            <div class="schedule-desc">
+                                <strong>專車安全返程</strong>
+                                <span>結束完美旅程，由專車送達指定地點。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="margin-top: 48px;">景點詳細介紹 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400; margin-left: 12px;">(點擊卡片查看)</span></h2>
                     <div class="timeline">
                         <div class="timeline-item clickable" onclick="openSpotDetail(0)">
                             <div class="timeline-icon"></div>
@@ -135,18 +182,12 @@
                             <li>行程內所標示之景點順序與停留時間，將視當日交通狀況與人潮進行彈性調整。若遇景點因天候或突發狀況臨時休園，金牌管家將於徵求旅客同意後，安排同等級之替代方案。</li>
                         </ul>
 
-                        <h4>【健康與特殊需求】</h4>
-                        <ul>
-                            <li>如旅客有特殊餐食需求（如全素、蛋奶素、清真認證、嚴重食物過敏），或有孕婦、患有心血管疾病及需使用輪椅之行動不便長輩同行，請務必於報名時主動告知，以便管家預先安排無障礙動線與調整餐飲。</li>
-                        </ul>
-
                         <h4>【取消與退費政策】</h4>
                         <p style="margin-bottom: 8px;">本行程之取消規定，除享有專案提供之「72小時前免費取消」禮遇外，其餘皆嚴格遵守交通部觀光署《國內旅遊定型化契約應記載及不得記載事項》第十一條辦理：</p>
                         <ul>
                             <li>旅客於出發日前第 3 日 (72小時) 以前取消，全額退費（無須扣除任何手續費）。</li>
                             <li>旅客於出發日前第 1 日至第 2 日內通知取消，收取旅遊費用 30% 作為補償營業與行政損失。</li>
                             <li>旅客於出發當日取消、集合逾時或未通知不參加者，收取旅遊費用 100% 賠償。</li>
-                            <li>如遇颱風、地震、豪雨等大自然不可抗拒之因素（依據行政院人事行政總處發布之停班停課公告為準），本公司保有延期出發或全額退費之權利。</li>
                         </ul>
                     </div>
                 </section>
@@ -255,24 +296,33 @@
     <div class="screen-overlay" id="auth-overlay">
         <div class="overlay-card">
             <button class="close-overlay" onclick="closeOverlay('auth-overlay')"><i class="fas fa-times"></i></button>
-            <h3 style="margin-bottom: 24px; font-size: 20px;">登入 / 註冊</h3>
-            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">請先登入或註冊會員，以便我們為您建立專屬訂單與旅遊保險作業。</p>
-            <form id="login-form">
-                <input type="email" class="overlay-input" placeholder="電子郵件" required value="user@example.com">
-                <input type="password" class="overlay-input" placeholder="密碼" required value="123456">
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">會員登入</button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">註冊帳號</button>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <input type="email" id="login-email" class="overlay-input" placeholder="電子郵件" required>
+                <input type="password" id="login-pwd" class="overlay-input" placeholder="密碼" required>
+                <button type="submit" class="btn-primary" style="margin-top: 16px;">登入</button>
+            </form>
+
+            <form id="register-form" class="auth-form" style="display: none;">
+                <input type="text" id="reg-name" class="overlay-input" placeholder="您的真實姓名 (保險使用)" required>
+                <input type="email" id="reg-email" class="overlay-input" placeholder="電子郵件" required>
+                <input type="password" id="reg-pwd" class="overlay-input" placeholder="設定密碼" required>
+                <input type="password" id="reg-pwd-confirm" class="overlay-input" placeholder="確認密碼" required>
                 
                 <div class="terms-checkbox-group">
                     <input type="checkbox" id="agree-terms" required>
                     <label for="agree-terms">
-                        我已詳細閱讀並同意<a href="#terms" onclick="closeOverlay('auth-overlay')">國內旅遊定型化契約</a>、服務條款與隱私權政策。
+                        我已詳細閱讀並同意<a href="#terms" onclick="closeOverlay('auth-overlay')">國內旅遊定型化契約</a>與隱私權政策。
                     </label>
                 </div>
 
-                <button type="submit" class="btn-primary" style="margin-top: 16px;">繼續</button>
+                <button type="submit" class="btn-primary" style="margin-top: 16px;">註冊並登入</button>
             </form>
-            <div style="text-align: center; margin-top: 16px; font-size: 13px;">
-                還沒有帳號？ <a href="#" style="color: var(--brand-color); text-decoration: none; font-weight: 600;">立即註冊</a>
-            </div>
         </div>
     </div>
 
