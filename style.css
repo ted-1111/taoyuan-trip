@@ -120,39 +120,48 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* 核心邏輯：強制絕對置中，無視設備尺寸 */
-    width: 220px;          /* 將原本的 120px 放大至 220px */
+    transform: translate(-50%, -50%); /* 絕對置中 */
+    width: 220px;
     height: 220px;
-    max-width: 60vw;       /* 加入保險機制：防止在極小手機螢幕上超出邊界 */
+    max-width: 60vw;
     max-height: 60vw;
     border-radius: 50%;
     z-index: 2;
     object-fit: cover;
-    animation: pulse 1.5s infinite;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulse 1.5s infinite; /* 預設播放閃爍動畫 */
 }
 
+/* 閃爍動畫 */
 @keyframes pulse {
     0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
     50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
 }
 
-/* 觸發縮小並飛往左上角的狀態 */
+/* 觸發飛行：利用全新動畫強制接管軌跡 */
 .loading-screen.shrink-to-nav .loading-icon {
-    animation: none; /* 停止閃爍，準備飛行 */
-    
-    /* 1. 目標尺寸：與導覽列 Icon 相同 */
-    width: 28px;
-    height: 28px;
-    
-    /* 2. 精準座標：利用 calc 自動計算大螢幕與手機的正確落點 */
-    top: 16px;
-    left: max(24px, calc(50vw - 560px + 24px)); 
-    transform: translate(0, 0); 
-    
-    /* 3. ⚠️ 關鍵修正：保持完全不透明，讓肉眼看見完整飛行軌跡 */
-    opacity: 1; 
+    /* forwards 代表動畫結束後，停留在 100% 的最終狀態 */
+    animation: fly-to-nav 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 專屬的飛行軌跡腳本 */
+@keyframes fly-to-nav {
+    0% {
+        /* 起點：正中央大圖 */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 220px;
+        height: 220px;
+    }
+    100% {
+        /* 終點：導覽列左上角精準座標 */
+        top: 16px;
+        left: max(24px, calc(50vw - 560px + 24px)); 
+        transform: translate(0, 0);
+        width: 28px;
+        height: 28px;
+    }
 }
 
 .loading-screen.shrink-to-nav .loading-bg {
