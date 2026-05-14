@@ -36,7 +36,7 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     gap: 12px;             /* 新增：圖片與文字之間的間距 */
 }
 .brand-icon {
-    height: 2px;          /* ⚠️ 關鍵：設定為 22px，這是一個很小的數字 */
+    height: 10px;          /* ⚠️ 關鍵：設定為 22px，這是一個很小的數字 */
     width: auto;           /* 寬度依比例自動縮放，圖片不會變形 */
     border-radius: 4px;    /* 稍微修一點點圓角，看起來更精緻 */
     object-fit: contain;   /* 新增：確保整張圖片都完整顯示在 22px 的高度內 */
