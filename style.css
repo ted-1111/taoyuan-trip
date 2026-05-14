@@ -37,9 +37,9 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 }
 
 .brand-icon {
-    height: 32px;          /* 強制限制 Icon 高度，避免撐爆導覽列 */
+    height: 26px;          /* 強制限制 Icon 高度，避免撐爆導覽列 */
     width: auto;           /* 寬度依比例自動縮放 */
-    border-radius: 8px;    /* 可選：讓圖片四角有些微圓角，視覺更柔和 */
+    border-radius: 6px;    /* 可選：讓圖片四角有些微圓角，視覺更柔和 */
     object-fit: cover;
 }
 .nav-links { display: flex; align-items: center; gap: 24px; }
