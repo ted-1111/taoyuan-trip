@@ -1,184 +1,147 @@
+// 1. 從 Firebase CDN 引入核心功能 (採用 v10 模組化語法)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut,
+    updateProfile 
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+// ==========================================
+// ⚠️ 請將以下 Config 替換為你的 Firebase 專案金鑰
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyDo_xuhKcmzB3rFpnfLe6HjFPCBtg6kaXE",
+    authDomain: "taoyuan-trip.firebaseapp.com",
+    projectId: "taoyuan-trip",
+    storageBucket: "taoyuan-trip.firebasestorage.app",
+    messagingSenderId: "584304238781",
+    appId: "1:584304238781:web:43fffe7694175d5e9317d4"
+  };
+
+// 2. 初始化 Firebase 與相關服務
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// 3. 全局狀態變數
 let isLoggedIn = false;
-let currentUser = "";
+let currentUser = null;
 
-// 啟動時檢查是否已有儲存的帳號狀態 (模擬真實登入記憶)
-const savedUser = localStorage.getItem('taoyuan_user');
-if (savedUser) {
-    isLoggedIn = true;
-    currentUser = savedUser;
-}
-
+// ==========================================
+// 景點資料與純前端視覺互動 (保留原本的功能)
+// ==========================================
 const spotData = [
-    {
-        title: "石門水庫 私房靜謐遊湖",
-        img: "url('https://images.unsplash.com/photo-1596400262145-36423e2fb3bc?auto=format&fit=crop&w=800&q=80')",
-        tags: ["#湖光山色", "#平緩步道", "#無障礙環境"],
-        desc: "石門水庫擁有壯麗的大壩景觀與幽靜的環湖步道。四季皆有不同的自然風情，春季賞櫻、秋季賞楓。由專屬管家帶領，避開人擠人的大眾路線，深入私房秘境步道。全程路面寬廣且平緩，長輩漫步或推動嬰兒車皆毫無障礙。",
-        highlight: "尊榮體驗的核心在於『不費力』。我們將專車直接停泊於最靠近絕佳景觀的特約區域，讓家族成員下車即可享受芬多精，徹底屏除長途步行的體力消耗。"
-    },
-    {
-        title: "Xpark 都會型水生公園 (VIP禮遇)",
-        img: "url('https://images.unsplash.com/photo-1621318164984-b06589834c91?auto=format&fit=crop&w=800&q=80')",
-        tags: ["#快速通關", "#親子互動", "#現代科技"],
-        desc: "Xpark 是由日本橫濱八景島首度跨海來台開設的都會型水生公園。館內結合了現代科技與生態展示，從深海生物到可愛的企鵝一應俱全。多樣的沉浸式空間設計，讓遊客宛如置身海底世界。",
-        highlight: "本專案包含 VIP 快速通關禮遇，免除旺季排隊購票的煩躁。室內恆溫的優質環境，是最高規格的親子海洋互動體驗，讓您的旅程不受任何氣候干擾。"
-    },
-    {
-        title: "中原夜市 專人美食導覽",
-        img: "url('https://images.unsplash.com/photo-1551043047-1d2adf00f3fd?auto=format&fit=crop&w=800&q=80')",
-        tags: ["#在地美食", "#管家代購", "#高自由度"],
-        desc: "中原夜市以多樣化的在地小吃與平價消費聞名。這裡集結了各式創意美食、傳統湯包、滷味與手搖飲。商圈範圍集中，動線清晰，是非常適合體驗台灣夜市活力的絕佳場所。",
-        highlight: "為了確保高端客群的舒適度，專屬管家將提供『必吃美食代購服務』。您無須在人群中擁擠排隊，只需點單，即可在專車上或我們安排的舒適席位輕鬆享用道地美味。"
-    }
+    { title: "石門水庫 私房靜謐遊湖", img: "url('https://images.unsplash.com/photo-1596400262145-36423e2fb3bc?auto=format&fit=crop&w=800&q=80')", tags: ["#湖光山色", "#平緩步道"], desc: "避開人擠人的大眾路線，深入私房秘境步道。", highlight: "專車直接停泊於最靠近絕佳景觀的特約區域。" },
+    { title: "Xpark 都會型水生公園", img: "url('https://images.unsplash.com/photo-1621318164984-b06589834c91?auto=format&fit=crop&w=800&q=80')", tags: ["#快速通關", "#親子互動"], desc: "館內結合了現代科技與生態展示，沉浸式空間設計。", highlight: "包含 VIP 快速通關禮遇，免除旺季排隊購票煩躁。" },
+    { title: "中原夜市 專人美食導覽", img: "url('https://images.unsplash.com/photo-1551043047-1d2adf00f3fd?auto=format&fit=crop&w=800&q=80')", tags: ["#在地美食", "#管家代購"], desc: "集結各式創意美食，非常適合體驗台灣夜市活力。", highlight: "專屬管家提供必吃美食代購服務，無須擁擠排隊。" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 更新登入按鈕狀態
+    // 視覺特效與計價邏輯初始化
+    initVisuals();
+    initPricing();
+    initAuthForms();
+    initBookingForm();
+});
+
+// ==========================================
+// Firebase 核心邏輯區
+// ==========================================
+
+// 監聽使用者登入狀態變化 (取代 LocalStorage 檢查)
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        isLoggedIn = true;
+        currentUser = user;
+    } else {
+        isLoggedIn = false;
+        currentUser = null;
+    }
     updateNavUI();
+});
 
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
-        });
-    }, revealOptions);
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    const liveViewersEl = document.getElementById('live-viewers');
-    setInterval(() => {
-        const current = parseInt(liveViewersEl.innerText);
-        const change = Math.floor(Math.random() * 3) - 1;
-        let newCount = current + change;
-        if (newCount < 8) newCount = 8;
-        if (newCount > 18) newCount = 18;
-        liveViewersEl.innerText = newCount;
-    }, 5000);
-
-    const track = document.getElementById('carousel-track');
-    const images = track.querySelectorAll('img');
-    const indicatorsContainer = document.getElementById('carousel-indicators');
-    let currentIndex = 0;
-
-    images.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (index === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => goToSlide(index));
-        indicatorsContainer.appendChild(dot);
-    });
-    const dots = document.querySelectorAll('.dot');
-
-    function goToSlide(index) {
-        currentIndex = index;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[currentIndex].classList.add('active');
-    }
-    setInterval(() => goToSlide((currentIndex + 1) % images.length), 4000);
-
-    const dateInput = document.getElementById('date');
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    dateInput.min = tomorrow.toISOString().split('T')[0];
-
-    const pricePerPerson = 5800;
-    const guestsSelect = document.getElementById('guests');
-    const finalTotal = document.getElementById('final-total');
-    const mobilePriceDisplay = document.getElementById('mobile-price-display');
-
-    function updatePricing() {
-        const count = parseInt(guestsSelect.value);
-        let total = pricePerPerson * count;
-        
-        document.getElementById('calc-base').innerText = `TWD 5,800 x ${count} 位`;
-        document.getElementById('calc-total').innerText = `TWD ${total.toLocaleString()}`;
-
-        if (count >= 4) {
-            let discount = total * 0.1;
-            total -= discount;
-            document.getElementById('discount-row').style.display = 'flex';
-            document.getElementById('calc-discount').innerText = `- TWD ${discount.toLocaleString()}`;
-        } else {
-            document.getElementById('discount-row').style.display = 'none';
-        }
-
-        const formattedTotal = `TWD ${total.toLocaleString()}`;
-        finalTotal.innerText = formattedTotal;
-        mobilePriceDisplay.innerText = formattedTotal;
-    }
-    guestsSelect.addEventListener('change', updatePricing);
-
+function initAuthForms() {
     const navAuthBtn = document.getElementById('nav-auth-btn');
+    
+    // 導覽列按鈕點擊事件
     navAuthBtn.addEventListener('click', (e) => {
         e.preventDefault();
         if (isLoggedIn) {
-            // 登出動作
-            isLoggedIn = false;
-            currentUser = "";
-            localStorage.removeItem('taoyuan_user');
-            updateNavUI();
+            // 執行 Firebase 登出
+            signOut(auth).then(() => {
+                alert("已成功登出。");
+            }).catch((error) => console.error("登出失敗:", error));
         } else {
             openOverlay('auth-overlay');
         }
     });
 
-    // 登入表單處理
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button');
-        const email = document.getElementById('login-email').value;
-        
-        // 簡單擷取 Email 前綴作為名稱
-        const name = email.split('@')[0];
-
-        btn.innerText = "驗證中...";
-        btn.disabled = true;
-        
-        setTimeout(() => {
-            isLoggedIn = true;
-            currentUser = name;
-            localStorage.setItem('taoyuan_user', name);
-            updateNavUI();
-            btn.innerText = "登入";
-            btn.disabled = false;
-            closeOverlay('auth-overlay');
-        }, 800);
-    });
-
-    // 註冊表單處理
+    // 註冊表單提交
     document.getElementById('register-form').addEventListener('submit', (e) => {
         e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
         const pwd = document.getElementById('reg-pwd').value;
         const pwdConfirm = document.getElementById('reg-pwd-confirm').value;
         
         if (pwd !== pwdConfirm) {
-            alert("密碼與確認密碼不相符，請重新輸入。");
-            return;
+            alert("密碼與確認密碼不相符！"); return;
         }
 
-        const btn = e.target.querySelector('button');
-        const name = document.getElementById('reg-name').value;
+        btn.innerText = "建立帳號中..."; btn.disabled = true;
 
-        btn.innerText = "建立帳號中...";
-        btn.disabled = true;
-
-        setTimeout(() => {
-            isLoggedIn = true;
-            currentUser = name;
-            localStorage.setItem('taoyuan_user', name);
-            updateNavUI();
-            btn.innerText = "註冊並登入";
-            btn.disabled = false;
-            closeOverlay('auth-overlay');
-        }, 800);
+        // Firebase 註冊 API
+        createUserWithEmailAndPassword(auth, email, pwd)
+            .then((userCredential) => {
+                // 註冊成功後，將真實姓名寫入 Firebase Profile
+                return updateProfile(userCredential.user, { displayName: name });
+            })
+            .then(() => {
+                btn.innerText = "註冊並登入"; btn.disabled = false;
+                closeOverlay('auth-overlay');
+                alert("帳號註冊成功！");
+            })
+            .catch((error) => {
+                btn.innerText = "註冊並登入"; btn.disabled = false;
+                alert("註冊失敗：" + getErrorMessage(error.code));
+            });
     });
 
-    document.getElementById('booking-form').addEventListener('submit', (e) => {
+    // 登入表單提交
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const email = document.getElementById('login-email').value;
+        const pwd = document.getElementById('login-pwd').value;
+
+        btn.innerText = "驗證中..."; btn.disabled = true;
+
+        // Firebase 登入 API
+        signInWithEmailAndPassword(auth, email, pwd)
+            .then(() => {
+                btn.innerText = "繼續"; btn.disabled = false;
+                closeOverlay('auth-overlay');
+            })
+            .catch((error) => {
+                btn.innerText = "繼續"; btn.disabled = false;
+                alert("登入失敗：" + getErrorMessage(error.code));
+            });
+    });
+}
+
+// 預訂表單提交 (將資料寫入 Firestore 資料庫)
+function initBookingForm() {
+    document.getElementById('booking-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         if (!isLoggedIn) {
@@ -187,37 +150,136 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const btn = document.getElementById('submit-btn');
-        const date = dateInput.value;
-        const guests = guestsSelect.value;
-        const total = finalTotal.innerText;
+        const dateInput = document.getElementById('date').value;
+        const guestsInput = document.getElementById('guests').value;
+        const totalAmount = document.getElementById('final-total').innerText;
         
-        btn.innerText = "資料處理中...";
+        btn.innerText = "資料寫入雲端中...";
         btn.style.opacity = "0.7";
         btn.disabled = true;
 
-        setTimeout(() => {
-            document.getElementById('receipt-date').innerText = date;
-            document.getElementById('receipt-guests').innerText = `${guests} 位`;
-            document.getElementById('receipt-total').innerText = total;
+        try {
+            // Firebase 寫入資料庫 API
+            const docRef = await addDoc(collection(db, "bookings"), {
+                uid: currentUser.uid,
+                email: currentUser.email,
+                name: currentUser.displayName || "未提供",
+                travelDate: dateInput,
+                guests: parseInt(guestsInput),
+                totalPrice: totalAmount,
+                status: "pending", // 訂單狀態：處理中
+                createdAt: serverTimestamp() // 伺服器時間戳記
+            });
 
+            // 成功寫入後，顯示成功畫面
+            document.getElementById('receipt-date').innerText = dateInput;
+            document.getElementById('receipt-guests').innerText = `${guestsInput} 位`;
+            document.getElementById('receipt-total').innerText = totalAmount;
+
+            openOverlay('success-overlay');
+        } catch (error) {
+            console.error("寫入資料庫失敗: ", error);
+            alert("系統繁忙，無法送出申請，請稍後再試。");
+        } finally {
             btn.innerText = "送出專屬預訂申請";
             btn.style.opacity = "1";
             btn.disabled = false;
-            
-            openOverlay('success-overlay');
-        }, 1200);
+        }
     });
-});
+}
+
+// ==========================================
+// 輔助函式與原本的 UI 邏輯
+// ==========================================
 
 function updateNavUI() {
     const navAuthBtn = document.getElementById('nav-auth-btn');
-    if (isLoggedIn) {
-        navAuthBtn.innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser} (登出)`;
+    if (isLoggedIn && currentUser) {
+        // 優先顯示 displayName，若無則顯示 email 前綴
+        const displayName = currentUser.displayName || currentUser.email.split('@')[0];
+        navAuthBtn.innerHTML = `<i class="fas fa-user-circle"></i> ${displayName} (登出)`;
     } else {
         navAuthBtn.innerHTML = '<i class="far fa-user-circle"></i> 登入 / 註冊';
     }
 }
 
+// 翻譯 Firebase 英文錯誤代碼
+function getErrorMessage(errorCode) {
+    switch (errorCode) {
+        case 'auth/email-already-in-use': return '這個 Email 已經被註冊過了。';
+        case 'auth/invalid-email': return 'Email 格式不正確。';
+        case 'auth/weak-password': return '密碼太弱，請至少輸入 6 個字元。';
+        case 'auth/user-not-found': return '找不到此帳號。';
+        case 'auth/wrong-password': return '密碼錯誤。';
+        case 'auth/invalid-credential': return '帳號或密碼錯誤。';
+        default: return '發生未知錯誤，請聯絡客服。';
+    }
+}
+
+// 以下為原本的視覺與計價邏輯，為避免全域污染已封裝至函式
+function initVisuals() {
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // 輪播圖邏輯...
+    const track = document.getElementById('carousel-track');
+    const images = track.querySelectorAll('img');
+    const indicatorsContainer = document.getElementById('carousel-indicators');
+    let currentIndex = 0;
+    images.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            currentIndex = index;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+            document.querySelectorAll('.dot')[currentIndex].classList.add('active');
+        });
+        indicatorsContainer.appendChild(dot);
+    });
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % images.length;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+        document.querySelectorAll('.dot')[currentIndex].classList.add('active');
+    }, 4000);
+}
+
+function initPricing() {
+    const dateInput = document.getElementById('date');
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+
+    const pricePerPerson = 5800;
+    const guestsSelect = document.getElementById('guests');
+    guestsSelect.addEventListener('change', () => {
+        const count = parseInt(guestsSelect.value);
+        let total = pricePerPerson * count;
+        document.getElementById('calc-base').innerText = `TWD 5,800 x ${count} 位`;
+        document.getElementById('calc-total').innerText = `TWD ${total.toLocaleString()}`;
+        if (count >= 4) {
+            let discount = total * 0.1; total -= discount;
+            document.getElementById('discount-row').style.display = 'flex';
+            document.getElementById('calc-discount').innerText = `- TWD ${discount.toLocaleString()}`;
+        } else {
+            document.getElementById('discount-row').style.display = 'none';
+        }
+        const formattedTotal = `TWD ${total.toLocaleString()}`;
+        document.getElementById('final-total').innerText = formattedTotal;
+        document.getElementById('mobile-price-display').innerText = formattedTotal;
+    });
+}
+
+// 暴露給 HTML onClick 使用的全域函式 (因為改用 Module，必須掛載到 window)
 window.switchAuthTab = function(tab) {
     if (tab === 'login') {
         document.getElementById('tab-login').classList.add('active');
@@ -232,10 +294,10 @@ window.switchAuthTab = function(tab) {
     }
 };
 
-function openOverlay(id) {
+window.openOverlay = function(id) {
     document.getElementById(id).classList.add('active');
     document.body.style.overflow = 'hidden';
-}
+};
 
 window.closeOverlay = function(id) {
     document.getElementById(id).classList.remove('active');
@@ -243,32 +305,25 @@ window.closeOverlay = function(id) {
 };
 
 window.triggerMobileBooking = function() {
-    if (!isLoggedIn) {
-        openOverlay('auth-overlay');
-    } else {
+    if (!isLoggedIn) { openOverlay('auth-overlay'); } 
+    else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => {
-            document.getElementById('date').focus();
-        }, 500);
+        setTimeout(() => document.getElementById('date').focus(), 500);
     }
 };
 
 window.openSpotDetail = function(index) {
     const data = spotData[index];
     if (!data) return;
-
     document.getElementById('spot-detail-img').style.backgroundImage = data.img;
     document.getElementById('spot-detail-title').innerText = data.title;
     document.getElementById('spot-detail-desc').innerText = data.desc;
     document.getElementById('spot-detail-highlight').innerText = data.highlight;
-    
     const tagsContainer = document.getElementById('spot-detail-tags');
     tagsContainer.innerHTML = ''; 
     data.tags.forEach(tag => {
         const span = document.createElement('span');
-        span.innerText = tag;
-        tagsContainer.appendChild(span);
+        span.innerText = tag; tagsContainer.appendChild(span);
     });
-
     openOverlay('spot-overlay');
 };
