@@ -179,6 +179,9 @@ function initAuthForms() {
 
 // 預訂表單提交 (將資料寫入 Firestore 資料庫)
 function initBookingForm() {
+    // 1. 初始化 EmailJS (將 YOUR_PUBLIC_KEY 替換為你的 Public Key)
+    window.emailjs.init("iQ8N7raHRVmlsker8");
+
     document.getElementById('booking-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -192,32 +195,51 @@ function initBookingForm() {
         const guestsInput = document.getElementById('guests').value;
         const totalAmount = document.getElementById('final-total').innerText;
         
-        btn.innerText = "資料寫入雲端中...";
+        btn.innerText = "資料處理中...";
         btn.style.opacity = "0.7";
         btn.disabled = true;
 
         try {
-            // Firebase 寫入資料庫 API
-            const docRef = await addDoc(collection(db, "bookings"), {
+            // 2. 寫入 Firebase 資料庫 (維持原本邏輯)
+            await addDoc(collection(db, "bookings"), {
                 uid: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName || "未提供",
                 travelDate: dateInput,
                 guests: parseInt(guestsInput),
                 totalPrice: totalAmount,
-                status: "pending", // 訂單狀態：處理中
-                createdAt: serverTimestamp() // 伺服器時間戳記
+                status: "pending",
+                createdAt: serverTimestamp()
             });
 
-            // 成功寫入後，顯示成功畫面
+            // 3. 準備 EmailJS 需要的變數資料
+            // 若使用者沒有 displayName，則自動擷取 email @ 前面的名稱作為替代
+            const userName = currentUser.displayName || currentUser.email.split('@')[0];
+            const templateParams = {
+                to_email: currentUser.email,
+                to_name: userName,
+                date: dateInput,
+                guests: guestsInput,
+                total_price: totalAmount
+            };
+
+            // 4. 發送 Email (替換為你的 Service ID 與 Template ID)
+            await window.emailjs.send(
+                "service_whf4j2b", 
+                "template_9mb75wi", 
+                templateParams
+            );
+
+            // 5. 顯示前端成功畫面
             document.getElementById('receipt-date').innerText = dateInput;
             document.getElementById('receipt-guests').innerText = `${guestsInput} 位`;
             document.getElementById('receipt-total').innerText = totalAmount;
 
             openOverlay('success-overlay');
+
         } catch (error) {
-            console.error("寫入資料庫失敗: ", error);
-            alert("系統繁忙，無法送出申請，請稍後再試。");
+            console.error("處理失敗: ", error);
+            alert("系統繁忙，無法送出申請或寄發信件，請稍後再試。");
         } finally {
             btn.innerText = "送出專屬預訂申請";
             btn.style.opacity = "1";
