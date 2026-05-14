@@ -83,7 +83,76 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .schedule-desc { display: flex; flex-direction: column; gap: 4px; }
 .schedule-desc strong { font-size: 16px; color: var(--text-main); }
 .schedule-desc span { font-size: 14px; color: var(--text-muted); }
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.5s ease;
+}
 
+/* 負責擴散的藍色圓形背景 */
+.loading-bg {
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-color: #031E33; /* ⚠️ 這裡填入你 Icon 的深藍色色碼 */
+    border-radius: 50%;
+    transition: width 0.8s ease-in-out, height 0.8s ease-in-out;
+    z-index: 1;
+}
+
+/* 觸發擴散的狀態 */
+.loading-bg.expand {
+    width: 300vw;
+    height: 300vw;
+}
+
+/* 中央的 Icon 樣式與閃爍動畫 */
+.loading-icon {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    z-index: 2;
+    object-fit: cover;
+    animation: pulse 1.5s infinite; /* 閃爍動畫 */
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* 觸發縮小並飛往左上角的狀態 */
+.loading-screen.shrink-to-nav {
+    background-color: transparent;
+    pointer-events: none; /* 停止阻擋點擊 */
+}
+
+.loading-screen.shrink-to-nav .loading-bg {
+    opacity: 0; /* 藍色背景淡出露出實際網頁 */
+    transition: opacity 0.5s ease;
+}
+
+.loading-screen.shrink-to-nav .loading-icon {
+    animation: none; /* 停止閃爍 */
+    /* 目標縮小尺寸與位置 (對齊你導覽列的 28px) */
+    width: 28px;
+    height: 28px;
+    top: 16px;
+    left: 24px;
+    opacity: 0; /* 飛到定點後隱藏，由原本 Navbar 裡的 Icon 接手 */
+}
 .clickable { cursor: pointer; }
 .timeline-item { display: flex; gap: 24px; margin-bottom: 16px; position: relative; padding: 16px; border-radius: 12px; transition: var(--transition); border: 1px solid transparent; }
 .timeline-item:hover { background: var(--bg-light); border-color: var(--border-light); transform: translateX(5px); box-shadow: var(--shadow-soft); }

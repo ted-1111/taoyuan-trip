@@ -46,6 +46,29 @@ const spotData = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 新增：載入動畫時程控制 ---
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingBg = document.getElementById('loading-bg');
+
+    if (loadingScreen) {
+        // 1. 停頓 1.5 秒後，藍色背景開始擴散填滿全畫面
+        setTimeout(() => {
+            loadingBg.classList.add('expand');
+        }, 1500);
+
+        // 2. 擴散後停留 0.8 秒（總計 2.3 秒），啟動飛往左上角的動畫
+        setTimeout(() => {
+            loadingScreen.classList.add('shrink-to-nav');
+        }, 2300);
+
+        // 3. 飛行動畫結束後（總計 3.2 秒），將動畫區塊徹底移除，釋放記憶體
+        setTimeout(() => {
+            loadingScreen.remove();
+        }, 3200);
+    }
+    // --- 載入動畫邏輯結束 ---
+
+    updateNavUI();
     // 視覺特效與計價邏輯初始化
     initVisuals();
     initPricing();
