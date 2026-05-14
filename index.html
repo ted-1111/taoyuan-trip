@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漫．跋 桃園 | 頂級私人定製探索之旅</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand">漫．跋 桃園</a>
+            <div class="nav-links">
+                <a href="#overview">總覽</a>
+                <a href="#itinerary">行程</a>
+                <a href="#terms">注意事項</a>
+                <a href="#" id="nav-auth-btn" class="login-btn"><i class="far fa-user-circle"></i> 登入/註冊</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header reveal" id="overview">
+            <h1>老少咸宜的頂級私人探索之旅</h1>
+            <div class="meta-info">
+                <span><i class="fas fa-map-marker-alt"></i> 桃園市</span>
+                <span class="urgency-badge"><i class="fas fa-fire"></i> 目前有 <span id="live-viewers">12</span> 人正在查看此尊榮方案</span>
+            </div>
+        </div>
+
+        <div class="carousel-container reveal">
+            <div class="carousel-track" id="carousel-track">
+                <img src="https://images.unsplash.com/photo-1596400262145-36423e2fb3bc?auto=format&fit=crop&w=1200&q=80" alt="石門水庫">
+                <img src="https://images.unsplash.com/photo-1621318164984-b06589834c91?auto=format&fit=crop&w=1200&q=80" alt="Xpark">
+                <img src="https://images.unsplash.com/photo-1551043047-1d2adf00f3fd?auto=format&fit=crop&w=1200&q=80" alt="大溪老街">
+            </div>
+            <div class="carousel-indicators" id="carousel-indicators"></div>
+        </div>
+
+        <div class="content-layout">
+            <div class="details-section">
+                
+                <section class="highlights reveal">
+                    <div class="highlight-item">
+                        <i class="fas fa-crown"></i>
+                        <div>
+                            <h3>尊榮家族包車</h3>
+                            <p>全程採用 Toyota Alphard 或 Lexus LM 頂級保母車，提供長輩與孩童最無負擔的移動體驗。</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-compass"></i>
+                        <div>
+                            <h3>金牌專屬管家隨行</h3>
+                            <p>拒絕走馬看花。由具備雙語能力與急救證照的金牌導遊全程伺候，節奏完全由您掌控。</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="far fa-calendar-check"></i>
+                        <div>
+                            <h3>極致彈性變更</h3>
+                            <p>出發前 72 小時免費取消或無限次更改日期，為高端客群提供最大的決策空間。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <section class="inclusions reveal">
+                    <h2>尊榮費用說明</h2>
+                    <div class="inclusion-grid">
+                        <ul class="check-list">
+                            <li><i class="fas fa-check"></i> 頂級座駕 (Alphard/LM) 台北/桃園專車到府接送</li>
+                            <li><i class="fas fa-check"></i> 國家級金牌專屬導遊全程隨行管家服務</li>
+                            <li><i class="fas fa-check"></i> 行程內所有景點門票 (含 Xpark 專屬 VIP 快速通關)</li>
+                            <li><i class="fas fa-check"></i> 中午享用在地頂級私廚或米其林推薦餐廳饗宴</li>
+                            <li><i class="fas fa-check"></i> 車內免費提供進口礦泉水、精品咖啡與茶點</li>
+                            <li><i class="fas fa-check"></i> 業界最高：500萬旅行平安險與50萬醫療險 (附加 SOS 救援)</li>
+                        </ul>
+                        <ul class="cross-list">
+                            <li><i class="fas fa-times"></i> 行程外之個人私人購物費用</li>
+                            <li><i class="fas fa-times"></i> 非標準行程內提供之額外高價酒水</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <section id="itinerary" class="itinerary reveal">
+                    <h2>詳細安排 <span style="font-size: 14px; color: var(--text-muted); font-weight: 400; margin-left: 12px;">(點擊卡片查看詳細介紹)</span></h2>
+                    <div class="timeline">
+                        <div class="timeline-item clickable" onclick="openSpotDetail(0)">
+                            <div class="timeline-icon"></div>
+                            <div class="timeline-content">
+                                <h3>石門水庫 私房靜謐遊湖 <i class="fas fa-chevron-right arrow-icon"></i></h3>
+                                <p>避開人潮擁擠時段，由專人引導至私房平緩步道，讓長輩在芬多精中輕鬆漫步。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item clickable" onclick="openSpotDetail(1)">
+                            <div class="timeline-icon"></div>
+                            <div class="timeline-content">
+                                <h3>Xpark 都會型水生公園 (VIP禮遇) <i class="fas fa-chevron-right arrow-icon"></i></h3>
+                                <p>免去排隊勞頓，尊享快速通關入館。室內恆溫環境，提供最舒適的親子海洋互動體驗。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item clickable" onclick="openSpotDetail(2)">
+                            <div class="timeline-icon"></div>
+                            <div class="timeline-content">
+                                <h3>中原夜市 專人美食導覽 <i class="fas fa-chevron-right arrow-icon"></i></h3>
+                                <p>夜間保有極高自由度，管家可代為排隊採買著名在地美食，您只需於專車上或指定席位輕鬆享用。</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="divider">
+
+                <section id="terms" class="legal-terms reveal">
+                    <h2>注意事項與退費規範</h2>
+                    <div class="terms-content">
+                        <h4>【報名與成行規範】</h4>
+                        <ul>
+                            <li>本行程為私人客製化頂級包車服務，保證 2 人即可成行。為維持服務品質，每日接待組數有限，請於預定出發日前至少 7 個工作日完成線上預訂申請。</li>
+                            <li>1-4 人將安排 7 座頂級商務車 (Toyota Alphard 等同級車款)；5-6 人將升等為 9 座豪華客車。考量長輩與孩童安全，車內皆可免費標配最高規格兒童安全座椅與基礎醫療急救箱。</li>
+                            <li>為確保旅遊平安險生效，請於預訂確認後，如實提供所有同行旅客之正確中文姓名、身分證字號與出生年月日。</li>
+                        </ul>
+                        
+                        <h4>【集合接送與行程異動】</h4>
+                        <ul>
+                            <li>專車到府接駁時間與地點，將由專屬管家於出發前 2 日以電子郵件及通訊軟體再次向您確認。</li>
+                            <li>請於指定時間提前 10 分鐘於接送地點候車。若因旅客個人因素遲到導致行程延誤或無法成行，將視為自動放棄，恕不退費。</li>
+                            <li>行程內所標示之景點順序與停留時間，將視當日交通狀況與人潮進行彈性調整。若遇景點因天候或突發狀況臨時休園，金牌管家將於徵求旅客同意後，安排同等級之替代方案。</li>
+                        </ul>
+
+                        <h4>【健康與特殊需求】</h4>
+                        <ul>
+                            <li>如旅客有特殊餐食需求（如全素、蛋奶素、清真認證、嚴重食物過敏），或有孕婦、患有心血管疾病及需使用輪椅之行動不便長輩同行，請務必於報名時主動告知，以便管家預先安排無障礙動線與調整餐飲。</li>
+                        </ul>
+
+                        <h4>【取消與退費政策】</h4>
+                        <p style="margin-bottom: 8px;">本行程之取消規定，除享有專案提供之「72小時前免費取消」禮遇外，其餘皆嚴格遵守交通部觀光署《國內旅遊定型化契約應記載及不得記載事項》第十一條辦理：</p>
+                        <ul>
+                            <li>旅客於出發日前第 3 日 (72小時) 以前取消，全額退費（無須扣除任何手續費）。</li>
+                            <li>旅客於出發日前第 1 日至第 2 日內通知取消，收取旅遊費用 30% 作為補償營業與行政損失。</li>
+                            <li>旅客於出發當日取消、集合逾時或未通知不參加者，收取旅遊費用 100% 賠償。</li>
+                            <li>如遇颱風、地震、豪雨等大自然不可抗拒之因素（依據行政院人事行政總處發布之停班停課公告為準），本公司保有延期出發或全額退費之權利。</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <div class="booking-sidebar">
+                <div class="booking-widget reveal">
+                    <div class="widget-header">
+                        <span class="price">TWD 5,800</span><span class="unit"> / 人</span>
+                    </div>
+                    <form id="booking-form" class="booking-form">
+                        <div class="input-group">
+                            <div class="input-field border-bottom">
+                                <label>出發日期</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <div class="input-field">
+                                <label>乘客人數</label>
+                                <select id="guests">
+                                    <option value="1">1 位</option>
+                                    <option value="2">2 位</option>
+                                    <option value="3">3 位</option>
+                                    <option value="4">4 位 (享家族包車 9 折)</option>
+                                    <option value="5">5 位 (享家族包車 9 折)</option>
+                                    <option value="6">6 位 (享家族包車 9 折)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submit-btn">送出專屬預訂申請</button>
+                        <p class="microcopy">此階段無需付款，頂級管家將於 12 小時內與您聯繫</p>
+                    </form>
+                    
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span id="calc-base">TWD 5,800 x 1 位</span>
+                            <span id="calc-total">TWD 5,800</span>
+                        </div>
+                        <div class="price-row discount-row" id="discount-row" style="display: none;">
+                            <span>家族尊榮折扣 (10%)</span>
+                            <span id="calc-discount">- TWD 0</span>
+                        </div>
+                        <hr class="divider-sm">
+                        <div class="price-row total-row">
+                            <span>預計總額 (TWD)</span>
+                            <span id="final-total">TWD 5,800</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="mobile-booking-bar">
+        <div class="mobile-price">
+            <span class="price" id="mobile-price-display">TWD 5,800</span><span class="unit"> / 人</span>
+        </div>
+        <button class="btn-primary" onclick="triggerMobileBooking()">送出專屬申請</button>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h4>漫．跋 桃園</h4>
+                <p>老少咸宜 ✕ 家族旅行 ✕ 自由探索</p>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone-alt"></i> 03-456-7890</p>
+                    <p><i class="fas fa-envelope"></i> service@taoyuantrip.com.tw</p>
+                </div>
+            </div>
+            <div class="footer-social">
+                <h4>追蹤我們</h4>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/" target="_blank" class="icon-ig"><i class="fab fa-instagram"></i></a>
+                    <a href="https://line.me/R/ti/p/" target="_blank" class="icon-line"><i class="fab fa-line"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-disclaimer" style="border-top: 1px solid var(--border-light); padding-top: 24px; margin-top: 24px;">
+            <p style="font-size: 12px; color: #999; text-align: justify; line-height: 1.6;">
+                <strong>免責聲明：</strong> 本網站為大學資管系課程之學術專案展示作品，非真實營運之旅行社。站內所有行程、價格與結帳流程皆為模擬測試，請勿輸入真實信用卡號或個人敏感資訊。本站不牽涉任何實質商業交易，亦不承擔任何法律與損害賠償責任。
+            </p>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 漫．跋 桃園. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="screen-overlay" id="spot-overlay">
+        <div class="spot-card-container">
+            <button class="close-spot-btn" onclick="closeOverlay('spot-overlay')"><i class="fas fa-times"></i></button>
+            <div class="spot-hero-image" id="spot-detail-img"></div>
+            <div class="spot-detail-content">
+                <div class="spot-tags" id="spot-detail-tags"></div>
+                <h3 id="spot-detail-title">--</h3>
+                <p class="spot-desc" id="spot-detail-desc">--</p>
+                <div class="spot-highlight">
+                    <strong>💡 頂規設計亮點：</strong>
+                    <span id="spot-detail-highlight">--</span>
+                </div>
+                <button class="btn-primary" style="margin-top: 24px;" onclick="closeOverlay('spot-overlay')">返回行程總覽</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen-overlay" id="auth-overlay">
+        <div class="overlay-card">
+            <button class="close-overlay" onclick="closeOverlay('auth-overlay')"><i class="fas fa-times"></i></button>
+            <h3 style="margin-bottom: 24px; font-size: 20px;">登入 / 註冊</h3>
+            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">請先登入或註冊會員，以便我們為您建立專屬訂單與旅遊保險作業。</p>
+            <form id="login-form">
+                <input type="email" class="overlay-input" placeholder="電子郵件" required value="user@example.com">
+                <input type="password" class="overlay-input" placeholder="密碼" required value="123456">
+                
+                <div class="terms-checkbox-group">
+                    <input type="checkbox" id="agree-terms" required>
+                    <label for="agree-terms">
+                        我已詳細閱讀並同意<a href="#terms" onclick="closeOverlay('auth-overlay')">國內旅遊定型化契約</a>、服務條款與隱私權政策。
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 16px;">繼續</button>
+            </form>
+            <div style="text-align: center; margin-top: 16px; font-size: 13px;">
+                還沒有帳號？ <a href="#" style="color: var(--brand-color); text-decoration: none; font-weight: 600;">立即註冊</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen-overlay" id="success-overlay">
+        <div class="overlay-card text-center">
+            <button class="close-overlay" onclick="closeOverlay('success-overlay')"><i class="fas fa-times"></i></button>
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h3 style="margin-bottom: 16px; font-size: 22px;">申請已成功送出！</h3>
+            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px;">我們已為您鎖定專屬名額。請確認以下細節：</p>
+            
+            <div class="receipt-details">
+                <div class="receipt-row"><span>出發日期</span><strong id="receipt-date">--</strong></div>
+                <div class="receipt-row"><span>乘客人數</span><strong id="receipt-guests">--</strong></div>
+                <hr style="border: 0; border-top: 1px dashed var(--border-light); margin: 12px 0;">
+                <div class="receipt-row" style="font-size: 18px;"><span>預計總額</span><strong id="receipt-total" style="color: var(--brand-color);">--</strong></div>
+            </div>
+
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 24px; line-height: 1.5;">
+                您的專屬旅遊管家將於 12 小時內與您聯繫確認細節。<br>在此之前您無須支付任何費用。
+            </p>
+            <button class="btn-secondary" style="margin-top: 24px; width: 100%;" onclick="closeOverlay('success-overlay')">關閉視窗</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
