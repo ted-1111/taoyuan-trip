@@ -380,7 +380,6 @@ window.openSpotDetail = function(index) {
     document.getElementById('spot-detail-img').style.backgroundImage = data.img;
     document.getElementById('spot-detail-title').innerText = data.title;
     document.getElementById('spot-detail-desc').innerText = data.desc;
-    document.getElementById('spot-detail-highlight').innerText = data.highlight;
     const tagsContainer = document.getElementById('spot-detail-tags');
     tagsContainer.innerHTML = ''; 
     data.tags.forEach(tag => {
