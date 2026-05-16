@@ -40,7 +40,7 @@ let currentUser = null;
 // 景點資料與純前端視覺互動 (保留原本的功能)
 // ==========================================
 const spotData = [
-    { title: "石門水庫 私房靜謐遊湖", img: "url('https://images.unsplash.com/photo-1596400262145-36423e2fb3bc?auto=format&fit=crop&w=800&q=80')", tags: ["#湖光山色", "#平緩步道"], desc: "避開人擠人的大眾路線，深入私房秘境步道。", highlight: "專車直接停泊於最靠近絕佳景觀的特約區域。" },
+    { title: "石門水庫 遊湖賞景", img: "url('shimen reservior.png')", tags: ["#四季美景勝地", "#壯闊湖光山色"], desc: "一年四季 風情萬種\n四季美景不間斷，山櫻、流蘇花、阿勃勒、秋楓及寒梅，賞花賞景、走馬看花，每個月都有嶄新體驗。\n湖光山色 遊湖經典\n來到石門水庫，遊湖延著蜿蜒的水道，行經石秀灣瀑布、龍珠灣等景點，碧色湖景猶如置身仙境，若是巧遇洩洪，也能一睹壯觀的震撼景色。" },
     { title: "Xpark 都會型水生公園", img: "url('https://images.unsplash.com/photo-1621318164984-b06589834c91?auto=format&fit=crop&w=800&q=80')", tags: ["#快速通關", "#親子互動"], desc: "館內結合了現代科技與生態展示，沉浸式空間設計。", highlight: "包含 VIP 快速通關禮遇，免除旺季排隊購票煩躁。" },
     { title: "中原夜市 專人美食導覽", img: "url('https://images.unsplash.com/photo-1551043047-1d2adf00f3fd?auto=format&fit=crop&w=800&q=80')", tags: ["#在地美食", "#管家代購"], desc: "集結各式創意美食，非常適合體驗台灣夜市活力。", highlight: "專屬管家提供必吃美食代購服務，無須擁擠排隊。" }
 ];
