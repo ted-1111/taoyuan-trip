@@ -67,12 +67,43 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .highlight-item h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
 .highlight-item p { color: var(--text-muted); font-size: 15px; }
 
-.inclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.check-list, .cross-list { list-style: none; }
-.check-list li { margin-bottom: 12px; line-height: 1.5; }
-.check-list i { color: var(--success); margin-right: 8px; }
-.cross-list li { margin-bottom: 12px; color: var(--text-muted); line-height: 1.5; }
-.cross-list i { color: var(--error); margin-right: 8px; }
+/* 1. 將 1fr 1fr 改為 1fr，讓區塊釋放佔滿全寬，文字就能一直走到最右邊 */
+.inclusion-grid { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 24px; 
+}
+
+.check-list, .cross-list { 
+    list-style: none; 
+}
+
+/* 2. 引入 Flexbox 完美排版 */
+.check-list li, .cross-list li { 
+    display: flex;             /* 讓圖示與文字水平排列 */
+    align-items: flex-start;   /* 確保圖示永遠對齊第一行文字頂端 */
+    margin-bottom: 12px; 
+    line-height: 1.5; 
+}
+
+/* 3. 保護圖示不變形 */
+.check-list i { 
+    color: var(--success); 
+    margin-right: 8px; 
+    flex-shrink: 0;            /* ⚠️ 關鍵：確保圖示不會因為文字太長而被往左擠壓變形 */
+    margin-top: 4px;           /* 微調，讓圖示與文字垂直視覺置中 */
+}
+
+.cross-list li { 
+    color: var(--text-muted); 
+}
+
+.cross-list i { 
+    color: var(--error); 
+    margin-right: 8px; 
+    flex-shrink: 0;            /* ⚠️ 同上，保護圖示 */
+    margin-top: 4px;
+}
 
 /* 時間行程表樣式 */
 .schedule-table { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 24px; margin-bottom: 32px; }
