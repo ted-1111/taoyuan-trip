@@ -269,21 +269,34 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     padding: 0 !important;
 }
 
-/* 2. 強制內容區塊向上貼齊 */
-.spot-detail-content {
-    margin-top: 0 !important;
-}
-
-/* 3. 重塑彈窗容器，只保留右上角按鈕的必要空間 */
+/* 1. 彈窗主容器：設定統一且緊湊的內距，徹底消除上方多餘留白 */
 .spot-card-container {
-    padding-top: 40px !important; 
-    position: relative !important; 
+    padding: 24px !important; 
+    position: relative !important;
 }
 
-/* 4. 精準定位關閉按鈕 */
+/* 2. 內容區塊：內外距徹底歸零，確保內容直接頂到最高處 */
+.spot-detail-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important; /* 確保沒有背景圖或遮罩殘留 */
+}
+
+/* 3. 標籤區塊：與叉叉對齊，並預留右側空間防重疊 */
+.spot-tags {
+    margin-top: 0 !important;
+    padding-right: 36px !important; /* 避免標籤太長撞到叉叉 */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center; /* 確保標籤內部垂直置中 */
+}
+
+/* 4. 叉叉按鈕：精準降落至與標籤同高的水平線上 */
 .close-spot-btn {
     position: absolute !important;
-    top: 12px !important;
-    right: 16px !important;
-    z-index: 10; /* 確保按鈕不會被背景圖蓋住而點不到 */
+    top: 24px !important;   /* 數值必須與容器的 padding-top 一致，就會在同一行 */
+    right: 24px !important; /* 數值必須與容器的 padding-right 一致 */
+    margin: 0 !important;
+    z-index: 10;
 }
