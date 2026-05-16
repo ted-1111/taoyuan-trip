@@ -261,21 +261,29 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     .nav-links { gap: 12px; }
     .nav-links a:not(.login-btn) { display: none; }
 }
-/* 1. 徹底移除原本為圖片預留的頂部空白 */
+/* 1. 徹底消滅原本圖片區塊的佔位空間 */
+.spot-hero-image {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 2. 強制內容區塊向上貼齊 */
 .spot-detail-content {
-    padding-top: 0 !important;
     margin-top: 0 !important;
 }
 
-/* 2. 重設卡片容器的上方內距，保持合理的視覺邊界 */
+/* 3. 重塑彈窗容器，只保留右上角按鈕的必要空間 */
 .spot-card-container {
-    padding-top: 32px !important; 
-    position: relative; /* 確保叉叉按鈕以此容器作為定位基準 */
+    padding-top: 40px !important; 
+    position: relative !important; 
 }
 
-/* 3. 將叉叉按鈕向下移動至卡片右上角內側 */
+/* 4. 精準定位關閉按鈕 */
 .close-spot-btn {
-    position: absolute;
-    top: 16px !important;  /* 距離頂部 16px */
-    right: 16px !important; /* 距離右側 16px */
+    position: absolute !important;
+    top: 12px !important;
+    right: 16px !important;
+    z-index: 10; /* 確保按鈕不會被背景圖蓋住而點不到 */
 }
