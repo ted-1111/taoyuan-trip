@@ -342,6 +342,25 @@
             </form>
         </div>
     </div>
+    <div class="screen-overlay" id="confirm-overlay">
+        <div class="overlay-card">
+            <button class="close-overlay" onclick="closeOverlay('confirm-overlay')"><i class="fas fa-times"></i></button>
+            <h3 style="margin-bottom: 16px; font-size: 22px; text-align: center;">確認預訂資訊</h3>
+            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 15px; text-align: center;">請確認以下資訊是否正確：</p>
+            
+            <div class="receipt-details">
+                <div class="receipt-row"><span>出發日期</span><strong id="confirm-date">--</strong></div>
+                <div class="receipt-row"><span>乘客人數</span><strong id="confirm-guests">--</strong></div>
+                <hr style="border: 0; border-top: 1px dashed var(--border-light); margin: 12px 0;">
+                <div class="receipt-row" style="font-size: 18px;"><span>預計總額</span><strong id="confirm-total" style="color: var(--brand-color);">--</strong></div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button class="btn-secondary" style="flex: 1;" onclick="closeOverlay('confirm-overlay')">返回修改</button>
+                <button class="btn-primary" style="flex: 1; margin: 0;" id="final-confirm-btn">確認送出</button>
+            </div>
+        </div>
+    </div>
 
     <div class="screen-overlay" id="success-overlay">
         <div class="overlay-card text-center">

@@ -184,54 +184,54 @@ function initBookingForm() {
     // 1. 初始化 EmailJS (將 YOUR_PUBLIC_KEY 替換為你的 Public Key)
     window.emailjs.init("iQ8N7raHRVmlsker8");
 
-    document.getElementById('booking-form').addEventListener('submit', async (e) => {
-    e.preventDefault(); // 攔截預設送出行為，統一由下方邏輯接管
+    document.getElementById('booking-form').addEventListener('submit', (e) => {
+        e.preventDefault(); 
+        const dateInput = document.getElementById('date');
 
-    const dateInput = document.getElementById('date');
-    if (dateInput) {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 10); // 當前日期加 10 天
-    
-    const yyyy = targetDate.getFullYear();
-    const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(targetDate.getDate()).padStart(2, '0');
-    
-    // 設定這行後，該日期以前的「所有」日子皆會被封鎖
-    dateInput.min = `${yyyy}-${mm}-${dd}`;
-}
+        // 1. 檢查是否填寫日期
+        if (!dateInput.value) {
+            alert("請先選擇出發日期與人數！");
+            const formWidget = document.querySelector('.booking-widget');
+            if (formWidget) formWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return; 
+        }
 
+        // 2. 嚴格日期邏輯驗證 (10天後)
+        const selectedDate = new Date(dateInput.value);
+        const minAllowedDate = new Date();
+        minAllowedDate.setDate(minAllowedDate.getDate() + 10);
+        minAllowedDate.setHours(0, 0, 0, 0); 
 
-    // 1. 檢查是否填寫日期
-    if (!dateInput.value) {
-        alert("請先選擇出發日期與人數！");
-        const formWidget = document.querySelector('.booking-widget');
-        if (formWidget) formWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return; 
-    }
+        if (selectedDate < minAllowedDate) {
+            alert("依規定，僅接受 10 個工作日後之預訂申請。請重新選擇日期。");
+            dateInput.value = ""; 
+            dateInput.focus();
+            return; 
+        }
 
-    // ========== 新增：嚴格日期邏輯驗證 ==========
-    const selectedDate = new Date(dateInput.value);
-    
-    // 計算 10 天後的絕對標準線，並將時間歸零以利精準比對
-    const minAllowedDate = new Date();
-    minAllowedDate.setDate(minAllowedDate.getDate() + 10);
-    minAllowedDate.setHours(0, 0, 0, 0); 
+        // 3. 檢查是否登入
+        if (!isLoggedIn) {
+            openOverlay('auth-overlay');
+            return; 
+        }
 
-    if (selectedDate < minAllowedDate) {
-        alert("依規定，僅接受 10 個工作日後之預訂申請。請重新選擇日期。");
-        dateInput.value = ""; // 清除不合法的日期
-        dateInput.focus();
-        return; // 強制中斷送出流程
-    }
-
-    // 2. 檢查是否登入
-    if (!isLoggedIn) {
-        openOverlay('auth-overlay');
-        return; // 中斷，等待使用者登入
-    }
-
-        const btn = document.getElementById('submit-btn');
+        // 4. 驗證通過，將畫面上的資料寫入確認彈窗中
         const guestsInput = document.getElementById('guests').value;
+        const totalAmount = document.getElementById('final-total').innerText;
+
+        document.getElementById('confirm-date').innerText = dateInput.value;
+        document.getElementById('confirm-guests').innerText = `${guestsInput} 位`;
+        document.getElementById('confirm-total').innerText = totalAmount;
+
+        // 5. 開啟確認彈窗
+        openOverlay('confirm-overlay');
+    });
+
+    // 階段二：使用者點擊「確認送出」，執行真實資料寫入與寄信
+    document.getElementById('final-confirm-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('final-confirm-btn');
+        const dateValue = document.getElementById('date').value;
+        const guestsValue = document.getElementById('guests').value;
         const totalAmount = document.getElementById('final-total').innerText;
         
         btn.innerText = "資料處理中...";
@@ -239,47 +239,48 @@ function initBookingForm() {
         btn.disabled = true;
 
         try {
-            // 2. 寫入資料庫
+            // 寫入 Firebase 資料庫
             await addDoc(collection(db, "bookings"), {
                 uid: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName || "未提供",
-                travelDate: dateInput.value, // 必須補上 .value 才能擷取文字
-                guests: parseInt(guestsInput),
+                travelDate: dateValue,
+                guests: parseInt(guestsValue),
                 totalPrice: totalAmount,
                 status: "pending",
                 createdAt: serverTimestamp()
             });
 
-            // 3. 準備 Email 變數
+            // 準備並寄發 EmailJS
             const userName = currentUser.displayName || currentUser.email.split('@')[0];
             const templateParams = {
                 to_email: currentUser.email,
                 to_name: userName,
-                date: dateInput.value, // 必須補上 .value
-                guests: guestsInput,
+                date: dateValue,
+                guests: guestsValue,
                 total_price: totalAmount
             };
 
-            // 4. 發送 Email (參數維持你的原設定)
             await window.emailjs.send(
                 "service_whf4j2b", 
                 "template_9mb75wi", 
                 templateParams
             );
 
-            // 5. 顯示前端成功畫面
-            document.getElementById('receipt-date').innerText = dateInput.value; // 必須補上 .value
-            document.getElementById('receipt-guests').innerText = `${guestsInput} 位`;
+            // 關閉確認彈窗，開啟成功彈窗並寫入最終收據
+            closeOverlay('confirm-overlay');
+            
+            document.getElementById('receipt-date').innerText = dateValue;
+            document.getElementById('receipt-guests').innerText = `${guestsValue} 位`;
             document.getElementById('receipt-total').innerText = totalAmount;
-
+            
             openOverlay('success-overlay');
 
         } catch (error) {
             console.error("處理失敗: ", error);
-            alert("系統繁忙，無法送出申請或寄發信件，請稍後再試。");
+            alert("目前無法處理申請，請稍後再試。");
         } finally {
-            btn.innerText = "送出專屬預訂申請";
+            btn.innerText = "確認送出";
             btn.style.opacity = "1";
             btn.disabled = false;
         }
