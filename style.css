@@ -442,3 +442,37 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     z-index: 10000;
 }
 }
+/* ==========================================
+   全域設定：預設隱藏手機版專屬懸浮列
+   ========================================== */
+.mobile-booking-bar {
+    display: none !important; /* 在電腦版強制隱藏 */
+}
+
+/* ==========================================
+   手機版專屬優化 (寬度 768px 以下觸發)
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. 手機版才顯示底部懸浮按鈕 */
+    .mobile-booking-bar {
+        display: flex !important; 
+        z-index: 2147483647 !important; /* 確保懸浮列在最上層 */
+    }
+
+    /* 2. 終極解決無法點選：將表單與輸入框圖層推至 CSS 最大值 */
+    .booking-widget,
+    .booking-form,
+    .input-group,
+    .input-field,
+    input[type="date"], 
+    input[type="number"] {
+        position: relative !important;
+        z-index: 2147483646 !important; 
+        pointer-events: auto !important; /* 強制接收任何點擊與觸控 */
+    }
+
+    /* 3. 在表單區域下方撐開空間，避免被懸浮按鈕蓋住 */
+    .booking-sidebar {
+        padding-bottom: 120px !important; 
+    }
+}
