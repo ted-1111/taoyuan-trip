@@ -458,3 +458,18 @@ window.triggerMobileBooking = function() {
         console.error("找不到送出按鈕");
     }
 };
+// 監聽表單區塊，到達時自動隱藏手機版底部懸浮列
+const bookingWidget = document.querySelector('.booking-widget');
+const mobileBar = document.querySelector('.mobile-booking-bar');
+if (bookingWidget && mobileBar) {
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            mobileBar.style.setProperty('display', 'none', 'important');
+        } else {
+            if (window.innerWidth <= 900) {
+                mobileBar.style.setProperty('display', 'flex', 'important');
+            }
+        }
+    }, { threshold: 0.1 });
+    observer.observe(bookingWidget);
+}
