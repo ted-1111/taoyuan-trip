@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateNavUI();
     // 視覺特效與計價邏輯初始化
     initVisuals();
-    initPricing();
+    calculateDynamicPrice();
     initAuthForms();
     initBookingForm();
 });
