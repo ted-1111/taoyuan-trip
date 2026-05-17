@@ -380,16 +380,42 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     } 
 
     /* 終極解決無法點選問題：拉高圖層與解除 iOS 限制 */
+    /* 終極解決無法點選問題：拉高圖層，並恢復系統原生觸發器 */
     .booking-widget, 
     .booking-form, 
     .input-group, 
-    .input-field,
+    .input-field {
+        position: relative !important;
+        z-index: 2147483646 !important; 
+        pointer-events: auto !important;
+    }
+
+    /* 針對輸入框獨立設定，不拔除 appearance，並撐開觸控範圍 */
     input[type="date"], 
     input[type="number"] {
         position: relative !important;
         z-index: 2147483646 !important; 
         pointer-events: auto !important;
-        -webkit-appearance: none;
-        appearance: none;
+        min-height: 44px !important; /* 確保符合 iOS 手指點擊的最小高度範圍 */
+        background: transparent;
+    }}
+    /* ==========================================
+   隱藏輪播圖底部的橫向灰色捲軸
+   ========================================== */
+.carousel-container {
+    -ms-overflow-style: none;  /* 適用於 IE / Edge */
+    scrollbar-width: none;     /* 適用於 Firefox */
+}
+.carousel-container::-webkit-scrollbar {
+    display: none;             /* 適用於 Chrome / Safari */
+}
+/* ==========================================
+   精準貼合手機版輪播圖高度，消除上下留白
+   ========================================== */
+@media (max-width: 900px) {
+    .carousel-container, 
+    .carousel-track {
+        /* 將原本過高的 350px 縮減，若覺得還是有縫隙，可將 160px 繼續調小 */
+        height: 160px !important; 
     }
 }
