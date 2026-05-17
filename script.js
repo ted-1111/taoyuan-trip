@@ -389,12 +389,12 @@ window.switchAuthTab = function(tab) {
 };
 
 window.openOverlay = function(id) {
-    document.getElementById(id).classList.add('active');
+    document.getElementById(overlayId).classList.add('active');
     document.body.style.overflow = 'hidden';
 };
 
 window.closeOverlay = function(id) {
-    document.getElementById(id).classList.remove('active');
+    document.getElementById(overlayId).classList.remove('active');
     document.body.style.overflow = '';
 };
 
