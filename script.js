@@ -328,7 +328,7 @@ function initPricing() {
         let total = pricePerPerson * count;
         document.getElementById('calc-base').innerText = `TWD 5,800 x ${count} 位`;
         document.getElementById('calc-total').innerText = `TWD ${total.toLocaleString()}`;
-        if (count >= 4) {
+        if (count >= 2) {
             let discount = total * 0.1; total -= discount;
             document.getElementById('discount-row').style.display = 'flex';
             document.getElementById('calc-discount').innerText = `- TWD ${discount.toLocaleString()}`;
