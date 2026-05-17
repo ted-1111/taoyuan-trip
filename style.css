@@ -54,8 +54,8 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .urgency-badge { background: #FFF4F4; color: #E61E4D; padding: 4px 12px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 6px; }
 
 .carousel-container {
-    width: 100%;
-    height: 35vh; /* 限制高度為螢幕總高度的 35% */
+    width: 120%;
+    height: 40vh; /* 限制高度為螢幕總高度的 35% */
     /* 若偏好固定尺寸，可將上一行改為 height: 320px; */
     
     object-fit: cover; /* 核心關鍵：強制圖片填滿指定高度，自動裁切上下邊緣，絕對不會變形 */
