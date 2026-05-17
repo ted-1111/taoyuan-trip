@@ -221,47 +221,40 @@
             </div>
 
             <div class="booking-sidebar">
-                <div class="booking-widget reveal">
-                    <div class="widget-header">
-                        <span class="price">TWD 5,800</span><span class="unit"> / 人</span>
+            <div class="booking-widget reveal">
+                <div class="widget-header">
+                    <span class="price" style="font-size: 20px;">平日 $1,399 / 假日 $1,499</span><span class="unit"> / 人</span>
+                </div>
+                <form id="booking-form" class="booking-form">
+                    <div class="input-group">
+                        <div class="input-field border-bottom">
+                            <label>出發日期</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="input-field">
+                            <label>乘客人數 (最多 30 位)</label>
+                            <input type="number" id="guests" min="1" max="30" value="1" required 
+                                   style="width: 100%; border: none; outline: none; padding: 8px 0; font-size: 16px;">
+                        </div>
                     </div>
-                    <form id="booking-form" class="booking-form">
-                        <div class="input-group">
-                            <div class="input-field border-bottom">
-                                <label>出發日期</label>
-                                <input type="date" id="date" required>
-                            </div>
-                            <div class="input-field">
-                                <label>乘客人數</label>
-                                <select id="guests">
-                                    <option value="1">1 位</option>
-                                    <option value="2">2 位</option>
-                                    <option value="3">3 位</option>
-                                    <option value="4">4 位 (享家族包車 9 折)</option>
-                                    <option value="5">5 位 (享家族包車 9 折)</option>
-                                    <option value="6">6 位 (享家族包車 9 折)</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <button type="submit" class="btn-primary" id="submit-btn">送出預訂申請</button>
-                        <p class="microcopy">此階段無需付款，小幫手將於 12 小時內與您聯繫</p>
-                    </form>
-                    
-                    <div class="price-breakdown">
-                        <div class="price-row">
-                            <span id="calc-base">TWD 5,800 x 1 位</span>
-                            <span id="calc-total">TWD 5,800</span>
-                        </div>
-                        <div class="price-row discount-row" id="discount-row" style="display: none;">
-                            <span>家族尊榮折扣 (10%)</span>
-                            <span id="calc-discount">- TWD 0</span>
-                        </div>
-                        <hr class="divider-sm">
-                        <div class="price-row total-row">
-                            <span>預計總額 (TWD)</span>
-                            <span id="final-total">TWD 5,800</span>
-                        </div>
+                    <button type="submit" class="btn-primary" id="submit-btn">送出預訂申請</button>
+                    <p class="microcopy">此階段無需付款，小幫手將於 12 小時內與您聯繫</p>
+                </form>
+                
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span id="calc-base">TWD 1,399 x 1 位</span>
+                        <span id="calc-total">TWD 1,399</span>
+                    </div>
+                    <div class="price-row discount-row" id="discount-row" style="display: none;">
+                        <span>同行九折優惠</span>
+                        <span id="calc-discount">- TWD 0</span>
+                    </div>
+                    <hr class="divider-sm">
+                    <div class="price-row total-row">
+                        <span>預計總額 (TWD)</span>
+                        <span id="final-total">TWD 1,399</span>
                     </div>
                 </div>
             </div>
@@ -270,7 +263,7 @@
 
     <div class="mobile-booking-bar">
         <div class="mobile-price">
-            <span class="price" id="mobile-price-display">TWD 5,800</span><span class="unit"> / 人</span>
+            <span class="price" id="mobile-price-display">TWD 1,399起</span>
         </div>
         <button class="btn-primary" onclick="triggerMobileBooking()">送出專屬申請</button>
     </div>

@@ -316,30 +316,62 @@ function initVisuals() {
     }, 4000);
 }
 
-function initPricing() {
-    const dateInput = document.getElementById('date');
-    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-    dateInput.min = tomorrow.toISOString().split('T')[0];
+// 確保程式碼能精準操控對應的畫面元素
+const dateInput = document.getElementById('date');
+const guestsInput = document.getElementById('guests');
+const calcBase = document.getElementById('calc-base');
+const calcTotal = document.getElementById('calc-total');
+const discountRow = document.getElementById('discount-row');
+const calcDiscount = document.getElementById('calc-discount');
+const finalTotal = document.getElementById('final-total');
+const mobilePriceDisplay = document.getElementById('mobile-price-display');
 
-    const pricePerPerson = 5800;
-    const guestsSelect = document.getElementById('guests');
-    guestsSelect.addEventListener('change', () => {
-        const count = parseInt(guestsSelect.value);
-        let total = pricePerPerson * count;
-        document.getElementById('calc-base').innerText = `TWD 5,800 x ${count} 位`;
-        document.getElementById('calc-total').innerText = `TWD ${total.toLocaleString()}`;
-        if (count >= 2) {
-            let discount = total * 0.1; total -= discount;
-            document.getElementById('discount-row').style.display = 'flex';
-            document.getElementById('calc-discount').innerText = `- TWD ${discount.toLocaleString()}`;
-        } else {
-            document.getElementById('discount-row').style.display = 'none';
+function calculateDynamicPrice() {
+    // 1. 驗證並限制人數在 1 至 30 人之間
+    let guests = parseInt(guestsInput.value) || 1;
+    if (guests > 30) { guests = 30; guestsInput.value = 30; }
+    if (guests < 1)  { guests = 1; guestsInput.value = 1; }
+
+    // 2. 依據星期幾判斷平假日價格 (0為週日，6為週六)
+    let basePrice = 1399; 
+    if (dateInput.value) {
+        const selectedDate = new Date(dateInput.value);
+        const day = selectedDate.getDay(); 
+        if (day === 0 || day === 6) {
+            basePrice = 1499;
         }
-        const formattedTotal = `TWD ${total.toLocaleString()}`;
-        document.getElementById('final-total').innerText = formattedTotal;
-        document.getElementById('mobile-price-display').innerText = formattedTotal;
-    });
+    }
+
+    // 3. 計算原始總價與折扣
+    let rawTotal = basePrice * guests;
+    let discount = 0;
+    
+    if (guests >= 2) {
+        discount = Math.round(rawTotal * 0.1); // 計算 10% 的折扣金額並四捨五入
+    }
+    let finalPrice = rawTotal - discount;
+
+    // 4. 即時渲染至網頁畫面上
+    if (calcBase) calcBase.innerText = `TWD ${basePrice.toLocaleString()} × ${guests} 位`;
+    if (calcTotal) calcTotal.innerText = `TWD ${rawTotal.toLocaleString()}`;
+    
+    if (discount > 0) {
+        if (discountRow) discountRow.style.display = 'flex';
+        if (calcDiscount) calcDiscount.innerText = `- TWD ${discount.toLocaleString()}`;
+    } else {
+        if (discountRow) discountRow.style.display = 'none';
+    }
+
+    if (finalTotal) finalTotal.innerText = `TWD ${finalPrice.toLocaleString()}`;
+    if (mobilePriceDisplay) mobilePriceDisplay.innerText = `TWD ${finalPrice.toLocaleString()}`;
 }
+
+// 綁定動態監聽事件
+dateInput.addEventListener('change', calculateDynamicPrice);
+guestsInput.addEventListener('input', calculateDynamicPrice);
+
+// 初始執行一次以顯示預設價格
+calculateDynamicPrice();
 
 // 暴露給 HTML onClick 使用的全域函式 (因為改用 Module，必須掛載到 window)
 window.switchAuthTab = function(tab) {
