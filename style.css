@@ -332,147 +332,64 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .social-links a.icon-line:hover { color: #fff; background: #00B900; border-color: #00B900; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 185, 0, 0.3); }
 .footer-bottom { border-top: 1px solid var(--border-light); padding-top: 24px; margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); }
 
+/* ==========================================
+   底部懸浮列 (預設：電腦版絕對隱藏)
+   ========================================== */
 .mobile-booking-bar {
-    /* 保留你原本的其他設定，例如 position: fixed; bottom: 0; 等等 */
-    
-    z-index: 10005 !important; /* 確保層級比剛才設定的 9999 還高 */
-    pointer-events: auto !important; /* 強制接收點擊指令 */
+    display: none !important; /* 解決痛點：電腦版絕對不會出現第二個按鈕 */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
+    align-items: center;
+    justify-content: space-between;
 }
 .mobile-booking-bar .price { font-size: 20px; font-weight: 600; }
 .mobile-booking-bar .btn-primary { width: auto; margin: 0; padding: 12px 28px; }
 
+
+/* ==========================================
+   900px 以下 (平板與手機版專屬排版)
+   ========================================== */
 @media (max-width: 900px) {
     .content-layout { grid-template-columns: 1fr; gap: 40px; }
     .carousel-container { height: 350px; border-radius: 0; margin-left: -24px; margin-right: -24px; width: auto; }
     .inclusion-grid { grid-template-columns: 1fr; }
-    .booking-sidebar { display: none; }
-    .mobile-booking-bar { display: flex; }
+    
     .footer-content { flex-direction: column; gap: 24px; }
     .nav-links { gap: 12px; }
     .nav-links a:not(.login-btn) { display: none; }
-}
-/* 1. 徹底消滅原本圖片區塊的佔位空間 */
-.spot-hero-image {
-    display: none !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
 
-/* 1. 彈窗主容器：設定統一且緊湊的內距，徹底消除上方多餘留白 */
-.spot-card-container {
-    padding: 24px !important; 
-    position: relative !important;
-}
-
-/* 2. 內容區塊：內外距徹底歸零，確保內容直接頂到最高處 */
-.spot-detail-content {
-    padding: 0 !important;
-    margin: 0 !important;
-    background: none !important; /* 確保沒有背景圖或遮罩殘留 */
-}
-
-/* 3. 標籤區塊：與叉叉對齊，並預留右側空間防重疊 */
-.spot-tags {
-    margin-top: 0 !important;
-    padding-right: 36px !important; /* 避免標籤太長撞到叉叉 */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center; /* 確保標籤內部垂直置中 */
-}
-
-/* 4. 叉叉按鈕：精準降落至與標籤同高的水平線上 */
-.close-spot-btn {
-    position: absolute !important;
-    top: 24px !important;   /* 數值必須與容器的 padding-top 一致，就會在同一行 */
-    right: 24px !important; /* 數值必須與容器的 padding-right 一致 */
-    margin: 0 !important;
-    z-index: 10;
-}/* 縮減卡片整體的內距 */
-.booking-widget {
-    padding: 20px !important; /* 原本可能太大，縮減為 20px */
-}
-
-/* 縮減輸入框的上下間距與高度 */
-.input-group {
-    margin-bottom: 16px !important; 
-}
-.input-field {
-    padding: 8px 12px !important; /* 讓輸入框扁一點 */
-}
-
-/* 縮減按鈕高度與下方小字的距離 */
-.booking-widget .btn-primary {
-    padding: 12px !important; /* 稍微壓扁按鈕 */
-    margin-top: 8px !important;
-}
-.microcopy {
-    margin: 8px 0 16px 0 !important; /* 減少免責聲明上下的空白 */
-}
-
-/* 縮減計價明細的行距 */
-.price-breakdown .price-row {
-    margin-bottom: 8px !important; 
-}
-.divider-sm {
-    margin: 12px 0 !important; /* 縮減分隔線的上下空間 */
-}
-/* ==========================================
-   手機版專屬優化 (寬度 768px 以下觸發)
-   ========================================== */
-@media (max-width: 768px) {
-    /* 1. 強制拉高表單區域的圖層層級，確保輸入框絕對在最上層 */
-    .booking-widget, .booking-form, .input-group {
-        position: relative !important;
-        z-index: 9999 !important;
-        pointer-events: auto !important; /* 確保能接收點擊與觸控 */
-    }
-
-    /* 2. 在表單區域最下方撐開空間，防止手機版底部懸浮列(mobile-booking-bar)蓋住輸入框 */
+    /* ⚠️ 解決痛點：讓表單在手機版乖乖顯示在最下方，不再隱形 */
     .booking-sidebar {
-        padding-bottom: 120px !important; 
+        display: block !important; 
+        position: relative;
+        top: 0;
+        padding-bottom: 120px !important; /* 撐開空間，防止被底部懸浮按鈕擋住 */
+        z-index: 9999;
     }
 
-    /* 3. 優化 iOS Safari 的點擊體驗，解除預設的輸入框限制 */
-    input[type="date"], input[type="number"] {
-    -webkit-appearance: none;
-    appearance: none; /* 補上標準寫法，消除黃線警告 */
-    position: relative;
-    z-index: 10000;
-}
-}
-/* ==========================================
-   全域設定：預設隱藏手機版專屬懸浮列
-   ========================================== */
-.mobile-booking-bar {
-    display: none !important; /* 在電腦版強制隱藏 */
-}
-
-/* ==========================================
-   手機版專屬優化 (寬度 768px 以下觸發)
-   ========================================== */
-@media (max-width: 768px) {
-    /* 1. 手機版才顯示底部懸浮按鈕 */
-    .mobile-booking-bar {
+    /* 手機版才顯示這條懸浮列 */
+    .mobile-booking-bar { 
         display: flex !important; 
-        z-index: 2147483647 !important; /* 確保懸浮列在最上層 */
-    }
+    } 
 
-    /* 2. 終極解決無法點選：將表單與輸入框圖層推至 CSS 最大值 */
-    .booking-widget,
-    .booking-form,
-    .input-group,
+    /* 終極解決無法點選問題：拉高圖層與解除 iOS 限制 */
+    .booking-widget, 
+    .booking-form, 
+    .input-group, 
     .input-field,
     input[type="date"], 
     input[type="number"] {
         position: relative !important;
         z-index: 2147483646 !important; 
-        pointer-events: auto !important; /* 強制接收任何點擊與觸控 */
-    }
-
-    /* 3. 在表單區域下方撐開空間，避免被懸浮按鈕蓋住 */
-    .booking-sidebar {
-        padding-bottom: 120px !important; 
+        pointer-events: auto !important;
+        -webkit-appearance: none;
+        appearance: none;
     }
 }
