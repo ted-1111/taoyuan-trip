@@ -239,30 +239,29 @@ function initBookingForm() {
         btn.disabled = true;
 
         try {
-            // 2. 寫入 Firebase 資料庫 (維持原本邏輯)
+            // 2. 寫入資料庫
             await addDoc(collection(db, "bookings"), {
                 uid: currentUser.uid,
                 email: currentUser.email,
                 name: currentUser.displayName || "未提供",
-                travelDate: dateInput,
+                travelDate: dateInput.value, // 必須補上 .value 才能擷取文字
                 guests: parseInt(guestsInput),
                 totalPrice: totalAmount,
                 status: "pending",
                 createdAt: serverTimestamp()
             });
 
-            // 3. 準備 EmailJS 需要的變數資料
-            // 若使用者沒有 displayName，則自動擷取 email @ 前面的名稱作為替代
+            // 3. 準備 Email 變數
             const userName = currentUser.displayName || currentUser.email.split('@')[0];
             const templateParams = {
                 to_email: currentUser.email,
                 to_name: userName,
-                date: dateInput,
+                date: dateInput.value, // 必須補上 .value
                 guests: guestsInput,
                 total_price: totalAmount
             };
 
-            // 4. 發送 Email (替換為你的 Service ID 與 Template ID)
+            // 4. 發送 Email (參數維持你的原設定)
             await window.emailjs.send(
                 "service_whf4j2b", 
                 "template_9mb75wi", 
@@ -270,7 +269,7 @@ function initBookingForm() {
             );
 
             // 5. 顯示前端成功畫面
-            document.getElementById('receipt-date').innerText = dateInput;
+            document.getElementById('receipt-date').innerText = dateInput.value; // 必須補上 .value
             document.getElementById('receipt-guests').innerText = `${guestsInput} 位`;
             document.getElementById('receipt-total').innerText = totalAmount;
 
@@ -428,11 +427,13 @@ window.switchAuthTab = function(tab) {
 window.openOverlay = function(overlayId) {
     document.getElementById(overlayId).classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden'; // 強制鎖定手機版背景滑動
 };
 
 window.closeOverlay = function(overlayId) {
     document.getElementById(overlayId).classList.remove('active');
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = ''; // 解除鎖定
 };
 
 window.triggerMobileBooking = function() {

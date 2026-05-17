@@ -419,3 +419,17 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
         height: 160px !important; 
     }
 }
+/* ==========================================
+   圖層階級重構：確保彈窗獨立於最上層，且內部元件皆可互動
+   ========================================== */
+.mobile-booking-bar {
+    z-index: 10000 !important; /* 降低懸浮列層級，避免與彈窗衝突 */
+}
+
+.screen-overlay {
+    z-index: 2147483647 !important; /* 賦予彈窗圖層最高極限值 */
+}
+
+.screen-overlay.active * {
+    pointer-events: auto !important; /* 強制釋放彈窗內部所有文字框與按鈕的點擊權限 */
+}
