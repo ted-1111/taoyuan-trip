@@ -386,17 +386,17 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     .input-group, 
     .input-field {
         position: relative !important;
-        z-index: 2147483646 !important; 
+        z-index: 10 !important; /* ⚠️ 關鍵：改為 10，讓它低於彈窗的 9999 */
         pointer-events: auto !important;
     }
 
-    /* 針對輸入框獨立設定，不拔除 appearance，並撐開觸控範圍 */
+    /* 2. 修正輸入框的圖層高度 */
     input[type="date"], 
     input[type="number"] {
         position: relative !important;
-        z-index: 2147483646 !important; 
+        z-index: 10 !important; /* ⚠️ 關鍵：改為 10 */
         pointer-events: auto !important;
-        min-height: 44px !important; /* 確保符合 iOS 手指點擊的最小高度範圍 */
+        min-height: 44px !important; 
         background: transparent;
     }}
     /* ==========================================
