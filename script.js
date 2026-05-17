@@ -208,7 +208,6 @@ function initBookingForm() {
     }
 
         const btn = document.getElementById('submit-btn');
-        const dateInput = document.getElementById('date').value;
         const guestsInput = document.getElementById('guests').value;
         const totalAmount = document.getElementById('final-total').innerText;
         
