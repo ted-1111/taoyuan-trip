@@ -1,3 +1,11 @@
+html {
+    /* 這裡的數值請替換為你「頂部導覽列」的實際高度 */
+    /* 預留 80px 到 100px 通常能完美對齊 */
+    scroll-padding-top: 90px !important; 
+    
+    /* (選用) 加上這行，點擊按鈕跳轉時會有平滑滑動的動畫，而不是瞬間閃現 */
+    scroll-behavior: smooth; 
+}
 :root {
     --brand-color: #E61E4D; 
     --brand-hover: #D70466;
