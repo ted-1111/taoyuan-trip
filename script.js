@@ -187,18 +187,41 @@ function initBookingForm() {
     document.getElementById('booking-form').addEventListener('submit', async (e) => {
     e.preventDefault(); // 攔截預設送出行為，統一由下方邏輯接管
 
-    const dateInput = document.getElementById('date'); // 確保在這裡抓取最新狀態
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 10); // 當前日期加 10 天
+    
+    const yyyy = targetDate.getFullYear();
+    const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(targetDate.getDate()).padStart(2, '0');
+    
+    // 設定這行後，該日期以前的「所有」日子皆會被封鎖
+    dateInput.min = `${yyyy}-${mm}-${dd}`;
+}
+
 
     // 1. 檢查是否填寫日期
     if (!dateInput.value) {
         alert("請先選擇出發日期與人數！");
-        
-        // 讓畫面平滑滾動到表單位置
         const formWidget = document.querySelector('.booking-widget');
-        if (formWidget) {
-            formWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        return; // 中斷後續動作
+        if (formWidget) formWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return; 
+    }
+
+    // ========== 新增：嚴格日期邏輯驗證 ==========
+    const selectedDate = new Date(dateInput.value);
+    
+    // 計算 10 天後的絕對標準線，並將時間歸零以利精準比對
+    const minAllowedDate = new Date();
+    minAllowedDate.setDate(minAllowedDate.getDate() + 10);
+    minAllowedDate.setHours(0, 0, 0, 0); 
+
+    if (selectedDate < minAllowedDate) {
+        alert("依規定，僅接受 10 個工作日後之預訂申請。請重新選擇日期。");
+        dateInput.value = ""; // 清除不合法的日期
+        dateInput.focus();
+        return; // 強制中斷送出流程
     }
 
     // 2. 檢查是否登入
