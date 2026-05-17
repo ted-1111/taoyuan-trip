@@ -344,4 +344,32 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     right: 24px !important; /* 數值必須與容器的 padding-right 一致 */
     margin: 0 !important;
     z-index: 10;
+}/* 縮減卡片整體的內距 */
+.booking-widget {
+    padding: 20px !important; /* 原本可能太大，縮減為 20px */
+}
+
+/* 縮減輸入框的上下間距與高度 */
+.input-group {
+    margin-bottom: 16px !important; 
+}
+.input-field {
+    padding: 8px 12px !important; /* 讓輸入框扁一點 */
+}
+
+/* 縮減按鈕高度與下方小字的距離 */
+.booking-widget .btn-primary {
+    padding: 12px !important; /* 稍微壓扁按鈕 */
+    margin-top: 8px !important;
+}
+.microcopy {
+    margin: 8px 0 16px 0 !important; /* 減少免責聲明上下的空白 */
+}
+
+/* 縮減計價明細的行距 */
+.price-breakdown .price-row {
+    margin-bottom: 8px !important; 
+}
+.divider-sm {
+    margin: 12px 0 !important; /* 縮減分隔線的上下空間 */
 }
