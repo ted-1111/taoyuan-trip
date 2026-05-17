@@ -74,30 +74,22 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .carousel-track { 
     display: flex; 
     width: 100%; 
-    height: 35vh; /* 將限高設定在這裡控制整體軌道高度 */
+    height: 35vh; 
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); 
-    
-    /* ⚠️ 核心關鍵 1：將 gap 移動到這裡！強制拉開軌道內子元素（圖片）之間的距離 */
-    gap: 16px; 
+    /* ⚠️ 拔除 gap，避免干擾 JS 輪播位移的數學計算 */
+    gap: 0 !important; 
 }
 
 .carousel-track img {
-    height: 100%; /* 佔滿軌道的高度 */
-    
-    /* ⚠️ 核心關鍵 2：寬度計算。
-       若輪播是一次顯示一張，設定為 100%。
-       若希望留白看起來更透氣或配合 object-fit: contain，可微調為扣掉 gap 的寬度 */
-    width: calc(100% - 16px); 
-    
-    /* ⚠️ 核心關鍵 3：防止圖片縮水。
-       因為在 flex 佈局下，若空間不足圖片會自動縮小。必須加上 flex-shrink: 0 強制圖片維持原本算好的寬度 */
+    /* ⚠️ 寬度強制設回 100%，確保每次滑動剛好對齊螢幕正中央 */
+    width: 100% !important; 
+    height: 100%;
     flex-shrink: 0; 
-
-    /* 維持原圖完整比例縮放不變形，兩側自動留白 */
+    
+    /* 靠 contain 自動將圖片等比例縮小並置中，兩側空出來的地方就是最完美的天然間距 */
     object-fit: contain; 
     object-position: center;
-    
-    
+    background-color: transparent !important; /* 背景改透明，讓留白更自然 */
 }
 
 .carousel-indicators { 
@@ -409,4 +401,28 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 }
 .divider-sm {
     margin: 12px 0 !important; /* 縮減分隔線的上下空間 */
+}
+/* ==========================================
+   手機版專屬優化 (寬度 768px 以下觸發)
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. 強制拉高表單區域的圖層層級，確保輸入框絕對在最上層 */
+    .booking-widget, .booking-form, .input-group {
+        position: relative !important;
+        z-index: 9999 !important;
+        pointer-events: auto !important; /* 確保能接收點擊與觸控 */
+    }
+
+    /* 2. 在表單區域最下方撐開空間，防止手機版底部懸浮列(mobile-booking-bar)蓋住輸入框 */
+    .booking-sidebar {
+        padding-bottom: 120px !important; 
+    }
+
+    /* 3. 優化 iOS Safari 的點擊體驗，解除預設的輸入框限制 */
+    input[type="date"], input[type="number"] {
+    -webkit-appearance: none;
+    appearance: none; /* 補上標準寫法，消除黃線警告 */
+    position: relative;
+    z-index: 10000;
+}
 }
