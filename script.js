@@ -185,12 +185,27 @@ function initBookingForm() {
     window.emailjs.init("iQ8N7raHRVmlsker8");
 
     document.getElementById('booking-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    e.preventDefault(); // 攔截預設送出行為，統一由下方邏輯接管
+
+    const dateInput = document.getElementById('date'); // 確保在這裡抓取最新狀態
+
+    // 1. 檢查是否填寫日期
+    if (!dateInput.value) {
+        alert("請先選擇出發日期與人數！");
         
-        if (!isLoggedIn) {
-            openOverlay('auth-overlay');
-            return;
+        // 讓畫面平滑滾動到表單位置
+        const formWidget = document.querySelector('.booking-widget');
+        if (formWidget) {
+            formWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        return; // 中斷後續動作
+    }
+
+    // 2. 檢查是否登入
+    if (!isLoggedIn) {
+        openOverlay('auth-overlay');
+        return; // 中斷，等待使用者登入
+    }
 
         const btn = document.getElementById('submit-btn');
         const dateInput = document.getElementById('date').value;
@@ -422,10 +437,25 @@ window.openSpotDetail = function(index) {
 };
 // 綁定手機版底部懸浮按鈕的功能
 window.triggerMobileBooking = function() {
+    const dateInput = document.getElementById('date');
     const submitBtn = document.getElementById('submit-btn');
+    
+    // 1. 檢查必填項目。如果沒選日期，自動滑動回表單區塊並提醒
+    if (dateInput && !dateInput.value) {
+        dateInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // 稍微延遲以確保畫面滑動完畢後再跳出提示
+        setTimeout(() => {
+            alert("請先選擇出發日期與人數");
+            dateInput.focus();
+        }, 300);
+        return;
+    }
+
+    // 2. 資料都填妥，觸發真實表單送出
     if (submitBtn) {
-        submitBtn.click(); // 模擬點擊原本的紅色大按鈕
+        submitBtn.click();
     } else {
-        console.error("找不到表單的送出按鈕");
+        console.error("找不到送出按鈕");
     }
 };

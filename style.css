@@ -332,7 +332,12 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 .social-links a.icon-line:hover { color: #fff; background: #00B900; border-color: #00B900; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0, 185, 0, 0.3); }
 .footer-bottom { border-top: 1px solid var(--border-light); padding-top: 24px; margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); }
 
-.mobile-booking-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; border-top: 1px solid var(--border-light); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); z-index: 99; justify-content: space-between; align-items: center; }
+.mobile-booking-bar {
+    /* 保留你原本的其他設定，例如 position: fixed; bottom: 0; 等等 */
+    
+    z-index: 10005 !important; /* 確保層級比剛才設定的 9999 還高 */
+    pointer-events: auto !important; /* 強制接收點擊指令 */
+}
 .mobile-booking-bar .price { font-size: 20px; font-weight: 600; }
 .mobile-booking-bar .btn-primary { width: auto; margin: 0; padding: 12px 28px; }
 
