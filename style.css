@@ -64,32 +64,43 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
 /* 修正後的版本 */
 
 .carousel-container {
-    display: block;  /* 最外層不需設為 flex */
     width: 100%;
-    overflow: hidden; /* 確保超出螢幕的圖片被隱藏，維持畫面乾淨 */
+    overflow-x: auto;
+    overflow-y: hidden;
     position: relative;
-    /* 這裡不需要 gap */
+    
+    /* ⚠️ 讓 iOS Safari 滑動順暢不卡頓 */
+    -webkit-overflow-scrolling: touch; 
+    
+    /* ⚠️ 核心：開啟 X 軸的強制滾動貼齊機制 */
+    scroll-snap-type: x mandatory; 
 }
 
+/* 2. 軌道：確保沒有多餘的預設留白干擾計算 */
 .carousel-track { 
     display: flex; 
     width: 100%; 
     height: 35vh; 
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); 
-    /* ⚠️ 拔除 gap，避免干擾 JS 輪播位移的數學計算 */
     gap: 0 !important; 
+    margin: 0 !important; 
+    padding: 0 !important;
 }
 
+/* 3. 圖片：設定吸附點為正中央 */
 .carousel-track img {
-    /* ⚠️ 寬度強制設回 100%，確保每次滑動剛好對齊螢幕正中央 */
     width: 100% !important; 
     height: 100%;
     flex-shrink: 0; 
-    
-    /* 靠 contain 自動將圖片等比例縮小並置中，兩側空出來的地方就是最完美的天然間距 */
     object-fit: contain; 
     object-position: center;
-    background-color: transparent !important; /* 背景改透明，讓留白更自然 */
+    background-color: transparent !important;
+    
+    /* ⚠️ 核心：告訴手機，滑動停止時這張圖的「中心點」要對齊螢幕的「中心點」 */
+    scroll-snap-align: center; 
+    
+    /* ⚠️ 防止某些手機瀏覽器將 100% 算錯，強制最大寬度為螢幕寬度 */
+    max-width: 100vw !important; 
 }
 
 .carousel-indicators { 

@@ -420,3 +420,12 @@ window.openSpotDetail = function(index) {
     });
     openOverlay('spot-overlay');
 };
+// 綁定手機版底部懸浮按鈕的功能
+window.triggerMobileBooking = function() {
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.click(); // 模擬點擊原本的紅色大按鈕
+    } else {
+        console.error("找不到表單的送出按鈕");
+    }
+};
