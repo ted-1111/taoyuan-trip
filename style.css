@@ -173,8 +173,8 @@ h2 { font-size: 26px; font-weight: 600; margin-bottom: 32px; letter-spacing: -0.
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     background-color: #ffffff;
-    z-index: 2147483647!;
-    overflow: hidden; /* 防止撐破螢幕 */
+    z-index: 2147483647 !important;
+    overflow: hidden; /* 防止撐破螢幕 1*/
     transition: background-color 0.5s ease;
 }
 
